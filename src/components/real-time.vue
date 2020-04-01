@@ -7,7 +7,10 @@
                 <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/real-time">即時用電量</router-link></li>
                 <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/heatmap">每日用電熱圖</router-link></li>
                 <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/area">每十五分鐘需量</router-link></li>
-                <li style="line-height: 40px;"><a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a></li>
+                <li style="line-height: 40px;">
+                    <!--<a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>-->
+                    <router-link style="color: white" class="col-2" to="/">登出系統</router-link>
+                </li>
             </ul>
         </div>
         <div class="container">
@@ -28,7 +31,7 @@
                         </button>
                     </div>
                     <div class="col-lg-3 col-md-12 mt-4">
-                        <span  style="color: white" >下一次資料更新時間為：{{output.countdown}} 秒後</span>
+                        <span  style="color: white;line-height: 35px" >下一次資料更新時間為：{{output.countdown}} 秒後</span>
                     </div>
                 </div>
             </form>
@@ -65,20 +68,21 @@
                     </div>
                     <div class="row p-3">
                         <div class="col-4">
-                            <p style="font-size: 16px;color: darkgrey">{{output.lists[3].name}}</p>
-                            <p style="font-weight:bold;font-size: 14px;color: white">{{output.lists[3].value}}</p>
+                            <p style="font-size: 14px;color: darkgrey">{{output.lists[3].name}}</p>
+                            <p style="font-weight:bold;font-size: 12px;color: white">{{output.lists[3].value}}</p>
                         </div>
                         <div class="col-4">
-                            <p style="font-size: 16px;color: darkgrey">{{output.lists[4].name}}</p>
-                            <p style="font-weight:bold;font-size: 14px;color: white">{{output.lists[4].value}}</p>
+                            <p style="font-size: 14px;color: darkgrey">{{output.lists[4].name}}</p>
+                            <p style="font-weight:bold;font-size: 12px;color: white">{{output.lists[4].value}}</p>
                         </div>
                         <div class="col-4">
-                            <p style="font-size: 16px;color: darkgrey">{{output.lists[7].name}}</p>
-                            <p style="font-weight:bold;font-size: 14px;color: white">{{output.lists[7].value}}</p>
+                            <p style="font-size: 14px;color: darkgrey">{{output.lists[7].name}}</p>
+                            <p style="font-weight:bold;font-size: 12px;color: white">{{output.lists[7].value}}</p>
                         </div>
                     </div>
                 </div>
             </div>
+            <p class="mt-4" style="color: white">即時需量變化表（每一分鐘更新）</p>
             <apexchart class="mt-3" ref="line" :height="apex.height" type="line" :options="apex.chartOptions"
                        :series="apex.series"></apexchart>
         </div>
@@ -109,7 +113,7 @@
                     },
                 },
                 apex: {
-                    height: window.innerHeight - 500,
+                    height: 500,
                     chartOptions: {
                         chart: {
                             foreColor: '#f5f5f5',

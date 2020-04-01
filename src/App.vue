@@ -5,25 +5,35 @@
     </div>
 </template>
 <style lang="scss">
-    .real-time-value {
-        font-weight: bold;
-        font-size: 16px;
-        color: white
-    }
-
-    .real-time-title {
-        font-size: 18px;
-        color: darkgrey
-    }
 
     @media screen and (max-width: 991px) {
         .mobile-disable {
             display: none;
         }
+        .real-time-value {
+            font-weight: bold;
+            font-size: 16px;
+            color: white
+        }
+
+        .real-time-title {
+            font-size: 14px;
+            color: darkgrey
+        }
     }
     @media screen and (min-width: 992px) {
         .desktop-disable {
             display: none!important;
+        }
+        .real-time-value {
+            font-weight: bold;
+            font-size: 18px;
+            color: white
+        }
+
+        .real-time-title {
+            font-size: 16px;
+            color: darkgrey
         }
     }
 

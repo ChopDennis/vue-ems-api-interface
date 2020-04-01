@@ -7,7 +7,10 @@
                     <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/real-time">即時用電量</router-link></li>
                     <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/heatmap">每日用電熱圖</router-link></li>
                     <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/area">每十五分鐘需量</router-link></li>
-                    <li style="line-height: 40px;"><a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a></li>
+                    <li style="line-height: 40px;">
+                        <!--<a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>-->
+                        <router-link style="color: white" class="col-2" to="/">登出系統</router-link>
+                    </li>
                 </ul>
             </div>
             <div class="container">

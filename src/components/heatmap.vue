@@ -13,7 +13,9 @@
                 <li style="line-height: 40px;">
                     <router-link style="color: white" class="col-2" to="/area">每十五分鐘需量</router-link>
                 </li>
-                <li style="line-height: 40px;"><a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>
+                <li style="line-height: 40px;">
+                    <!--<a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>-->
+                    <router-link style="color: white" class="col-2" to="/">登出系統</router-link>
                 </li>
             </ul>
         </div>
@@ -135,9 +137,6 @@
         },
         methods: {
             showHeatmap(heatmapData) {
-                const monthTotal = this.sumTotal(heatmapData);
-                this.modifyData(heatmapData);
-                this.modifyName(heatmapData, monthTotal);
                 const maximum = this.findMaximum(heatmapData);
                 const minimum = this.findMinimum(heatmapData);
                 const upperLimit = Math.ceil(maximum);
@@ -214,6 +213,10 @@
                 axios.post(path, formValue).then(
                     (response) => {
                         let heatmapData = response.data;
+                        const monthTotal = this.sumTotal(heatmapData);
+                        this.modifyName(heatmapData, monthTotal);
+
+//                        this.modifyData(heatmapData);
                         this.showHeatmap(heatmapData);
                         this.outputCSV(heatmapData);
                         this.message.total = "從 " + this.input.date.selected + " 開始的 " + this.input.days.selected + " 天，總用電度數為：" + this.output.total;

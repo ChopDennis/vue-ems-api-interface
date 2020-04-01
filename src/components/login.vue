@@ -2,7 +2,7 @@
     <div style="height: 100vh">
         <div style="color:white;background-color: rgba(255, 255, 255, 0.13);border-radius: 7px;padding: 1rem"
              class="w-75 mx-auto my-5">
-            <h1>登入 EMS-SPA</h1>
+            <h1>登入 EMS</h1>
             <form @submit.prevent="login" class="form-group">
                 <label for="email">輸入信箱：</label>
                 <input id="email" class="form-control col-lg-6 m-auto" type="email" v-model="email" required>
