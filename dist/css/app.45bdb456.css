@@ -1,4 +1,4 @@
-.real-time-value{font-weight:700;font-size:16px;color:#fff}.real-time-title{font-size:18px;color:#a9a9a9}@media screen and (max-width:991px){.mobile-disable{display:none}}@media screen and (min-width:992px){.desktop-disable{display:none!important}}/*!
+@media screen and (max-width:991px){.mobile-disable{display:none}.real-time-value{font-weight:700;font-size:16px;color:#fff}.real-time-title{font-size:14px;color:#a9a9a9}}@media screen and (min-width:992px){.desktop-disable{display:none!important}.real-time-value{font-weight:700;font-size:18px;color:#fff}.real-time-title{font-size:16px;color:#a9a9a9}}/*!
  * Bootstrap v4.4.1 (https://getbootstrap.com/)
  * Copyright 2011-2019 The Bootstrap Authors
  * Copyright 2011-2019 Twitter, Inc.
