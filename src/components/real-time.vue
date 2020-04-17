@@ -90,7 +90,7 @@
 </template>
 <script>
     import axios from 'axios';
-
+    console.log(axios.default);
     export default {
         data: () => {
             return {
@@ -99,15 +99,15 @@
                         selected: '',
                         options: [
                             {
-                                id: 1, text: '16274114w00'
+                                id: 1, text: '16274114w00_010se'
                             }, {
-                                id: 2, text: '16484660100'
+                                id: 2, text: '16484660100_010se'
                             }, {
-                                id: 3, text: '16484851013'
+                                id: 3, text: '16484851013_010se'
                             }, {
-                                id: 4, text: '16484840019'
+                                id: 4, text: '16484840019_010se'
                             }, {
-                                id: 5, text: '16484740018'
+                                id: 5, text: '16484740018_010se'
                             }
                         ],
                     },
@@ -187,7 +187,8 @@
             onSubmit(e) {
                 e.preventDefault();
                 this.get.params.place_id = this.input.placeID.selected;
-                const path = "https://db4.ima-ems.com/api/place/powermeters";
+                const baseURL = "https://demo-site.ima-ems.com";
+                const path = baseURL + "/api/realtime";
                 this.getData(path);
                 this.countDown();
                 setInterval(() => {
@@ -198,7 +199,11 @@
                 console.log(this.apex.series[0]);
                 this.$refs.line.appendData([{data: [[appendTime + 28800000, this.output.lists[2].value]]}])
             }, getData(path) {
-                axios.get(path, this.get).then(
+                const request = axios.create({
+                    withCredentials: true
+                });
+
+                request.get(path, this.get).then(
                     (response) => {
                         console.log(response);
                         let realTimeData = response.data;

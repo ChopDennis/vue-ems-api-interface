@@ -30,15 +30,14 @@
         methods: {
             login() {
                 let formValue = new FormData();
-                const path = "https://auth.ima-ems.com/auth/";
+                const baseURL = "https://demo-site.ima-ems.com";
+                const path = baseURL + "/api/user/login";
                 formValue.append("email", this.email);
                 formValue.append("password", this.password);
-                formValue.append("application", this.application);
                 let config = {
 
                     email: this.email,
                     password: this.password,
-                    application: this.application
 
                 };
                 axios.post(path, config).then(

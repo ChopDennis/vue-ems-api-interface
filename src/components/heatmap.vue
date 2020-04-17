@@ -206,7 +206,8 @@
             }, onSubmit(e) {
                 e.preventDefault();
                 let formValue = new FormData();
-                const path = "https://analytic.ima-ems.com/api/kwh_summary";
+                const baseURL = "https://demo-site.ima-ems.com";
+                const path = baseURL + "/api/analytic/kwh_summary";
                 formValue.append("device_id", this.input.deviceID.selected);
                 formValue.append("check_day", this.input.date.selected);
                 formValue.append("days", this.input.days.selected);
