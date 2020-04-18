@@ -72,8 +72,8 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-
+    import axios from 'axios'
+    axios.defaults.withCredentials = true
     export default {
         data: () => {
             return {
@@ -137,14 +137,14 @@
         },
         methods: {
             showHeatmap(heatmapData) {
-                const maximum = this.findMaximum(heatmapData);
-                const minimum = this.findMinimum(heatmapData);
-                const upperLimit = Math.ceil(maximum);
-                const lowerLimit = Math.floor(minimum);
-                const percent = this.setPercent(upperLimit, lowerLimit);
-                let labelShow = false;
+                const maximum = this.findMaximum(heatmapData)
+                const minimum = this.findMinimum(heatmapData)
+                const upperLimit = Math.ceil(maximum)
+                const lowerLimit = Math.floor(minimum)
+                const percent = this.setPercent(upperLimit, lowerLimit)
+                let showLabel = false
                 if (window.innerWidth > 991) {
-                    labelShow = true;
+                    showLabel = true
                 }
                 this.apex.chartOptions = {
                     plotOptions: {
@@ -192,114 +192,112 @@
                                         to: upperLimit,
                                         color: this.percent2color(100)
                                     }]
-
                             }
                         }
                     }, dataLabels: {
-                        enabled: labelShow
+                        enabled: showLabel
                     }, xaxis: {
                         type: 'category',
                         categories: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00']
                     }
-                };
-                this.apex.series = heatmapData;
+                }
+                this.apex.series = heatmapData
             }, onSubmit(e) {
-                e.preventDefault();
-                let formValue = new FormData();
-                const baseURL = "https://demo-site.ima-ems.com";
-                const path = baseURL + "/api/analytic/kwh_summary";
-                formValue.append("device_id", this.input.deviceID.selected);
-                formValue.append("check_day", this.input.date.selected);
-                formValue.append("days", this.input.days.selected);
+                e.preventDefault()
+                let formValue = new FormData()
+                const baseURL = "https://demo-site.ima-ems.com"
+                const path = baseURL + "/api/analytic/kwh_summary"
+                formValue.append("device_id", this.input.deviceID.selected)
+                formValue.append("check_day", this.input.date.selected)
+                formValue.append("days", this.input.days.selected)
                 axios.post(path, formValue).then(
                     (response) => {
-                        let heatmapData = response.data;
-                        const monthTotal = this.sumTotal(heatmapData);
-                        this.modifyName(heatmapData, monthTotal);
-
-//                        this.modifyData(heatmapData);
-                        this.showHeatmap(heatmapData);
-                        this.outputCSV(heatmapData);
-                        this.message.total = "從 " + this.input.date.selected + " 開始的 " + this.input.days.selected + " 天，總用電度數為：" + this.output.total;
+                        let heatmapData = response.data
+                        const monthTotal = this.sumTotal(heatmapData)
+                        this.modifyName(heatmapData, monthTotal)
+//                        this.modifyData(heatmapData)
+                        this.showHeatmap(heatmapData)
+                        this.outputCSV(heatmapData)
+                        this.message.total = "從 " + this.input.date.selected + " 開始的 " + this.input.days.selected + " 天，總用電度數為：" + this.output.total
                     }).catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
-            }, modifyName(inputArray, valueList) {
+            }, modifyName(inputArray, dataList) {
                 inputArray.forEach((item, index) => {
-                    item.name = item.name.replace('2020-', '');
-                    item.name += '（' + valueList[index] + '）';
-                });
+                    item.name = item.name.replace('2020-', '')
+                    item.name += '（' + dataList[index] + '）'
+                })
             }, modifyData(inputArray) {
                 inputArray.forEach((item, index, thisArray) => {
                     thisArray[index].data.forEach((data, dataIndex, dataArray) => {
-                        let data_min = Infinity;
+                        let data_min = Infinity
                         dataArray.forEach((value) => {
                             if (value !== 0) {
                                 if (value < data_min) {
-                                    data_min = value;
+                                    data_min = value
                                 }
                             }
-                        });
+                        })
                         if (data === 0) {
-                            dataArray[dataIndex] = data_min;
+                            dataArray[dataIndex] = data_min
                         }
                     })
-                });
+                })
             }, findMaximum(inputArray) {
-                let dataList = [];
+                let dataList = []
                 inputArray.forEach((item) => {
-                    dataList.push(Math.max.apply(null, item.data));
-                });
-                return Math.max.apply(null, dataList);
+                    dataList.push(Math.max(...item.data))
+                })
+                return Math.max(...dataList)
             }, findMinimum(inputArray) {
-                let dataList = [];
+                let dataList = []
                 inputArray.forEach((item) => {
-                    dataList.push(Math.min.apply(null, item.data))
-                });
-                return Math.min.apply(null, dataList);
+                    dataList.push(Math.min(...item.data))
+                })
+                return Math.min(...dataList)
             }, setPercent(upperLimit, lowerLimit) {
-                let percent = [];
-                const step = Math.floor((upperLimit - lowerLimit) / 10);
+                let percent = []
+                const step = Math.floor((upperLimit - lowerLimit) / 10)
                 for (let i = 1, j = 1; i < 10; i++) {
-                    percent[i] = lowerLimit + step * j++;
+                    percent[i] = lowerLimit + step * j++
                 }
-                return percent;
+                return percent
             }, percent2color(percent) {
-                let r, g, b = 0;
+                let r, g, b = 0
                 if (percent < 40) {
-                    g = 180;
-                    r = Math.round(5.1 * percent);
+                    g = 180
+                    r = Math.round(5.1 * percent)
                 }
                 else if (percent >= 40 && percent <= 50) {
-                    g = 225;
-                    r = Math.round(2 * percent + 155);
+                    g = 225
+                    r = Math.round(2 * percent + 155)
                 }
                 else {
-                    r = 255;
-                    g = Math.round(510 - 5.10 * percent);
+                    r = 255
+                    g = Math.round(510 - 5.10 * percent)
                 }
-                let h = r * 0x10000 + g * 0x100 + b * 0x1;
-                return '#' + ('000000' + h.toString(16)).slice(-6);
+                let h = r * 0x10000 + g * 0x100 + b * 0x1
+                return '#' + ('000000' + h.toString(16)).slice(-6)
             }, outputCSV(inputArray) {
-                let encodedUri = '';
-                this.output.csv.fileName = 'heatmap-' + this.input.date.selected + '-' + this.input.days.selected + '.csv';
+                let encodedUri = ''
+                this.output.csv.fileName = 'heatmap-' + this.input.date.selected + '-' + this.input.days.selected + '.csv'
                 inputArray.forEach((item) => {
-                    this.output.csv.content += "日期（總度數）," + item.name + "\r\n" + "時間,度數" + "\r\n";
+                    this.output.csv.content += "日期（總度數）," + item.name + "\r\n" + "時間,度數" + "\r\n"
                     item.data.forEach((data, index) => {
-                        this.output.csv.content += this.apex.chartOptions.xaxis.categories[index] + ',' + data + "\r\n";
-                    });
-                    encodedUri = encodeURI(this.output.csv.content);
-                });
-                this.output.csv.href = this.output.csv.header + encodedUri;
+                        this.output.csv.content += this.apex.chartOptions.xaxis.categories[index] + ',' + data + "\r\n"
+                    })
+                    encodedUri = encodeURI(this.output.csv.content)
+                })
+                this.output.csv.href = this.output.csv.header + encodedUri
             }, sumTotal(inputArray) {
-                let dayTotal = [];
-                const reducer = (accumulator, currentValue) => accumulator + currentValue;
+                let totalOfDay = []
+                const reducer = (accumulator, currentValue) => accumulator + currentValue
                 inputArray.forEach((item, index) => {
-                    dayTotal[index] = parseInt(item.data.reduce(reducer).toFixed(0));
-                });
-                this.output.total = dayTotal.reduce(reducer);
-                return dayTotal;
+                    totalOfDay[index] = parseInt(item.data.reduce(reducer).toFixed(0))
+                })
+                this.output.total = totalOfDay.reduce(reducer)
+                return totalOfDay
             }
         }
-    };
+    }
 </script>

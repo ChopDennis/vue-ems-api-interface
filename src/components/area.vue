@@ -58,12 +58,10 @@
             </div>
         </div>
     </div>
-
-
 </template>
 <script>
-    import axios from 'axios';
-
+    import axios from 'axios'
+    axios.defaults.withCredentials = true
     export default {
         data: () => {
             return {
@@ -137,48 +135,48 @@
         },
         methods: {
             onSubmit(e) {
-                e.preventDefault();
-                let formValue = new FormData();
-                const baseURL = "https://demo-site.ima-ems.com";
-                const path = baseURL + "/api/analytic/kw_summary";
-                formValue.append("device_id", this.input.deviceID.selected);
-                formValue.append("check_day", this.input.date.selected);
+                e.preventDefault()
+                let formValue = new FormData()
+                const baseURL = "https://demo-site.ima-ems.com"
+                const path = baseURL + "/api/analytic/kw_summary"
+                formValue.append("device_id", this.input.deviceID.selected)
+                formValue.append("check_day", this.input.date.selected)
                 axios.post(path, formValue).then(
                     (response) => {
-                        console.log(response);
-                        const dataWithTime = this.addTime2xAxis(response.data);
-                        this.apex.series = [{name: this.input.date.selected, data: dataWithTime}];
-                        this.outputCSV(dataWithTime);
+                        console.log(response)
+                        const dataWithTime = this.addTime2xAxis(response.data)
+                        this.apex.series = [{name: this.input.date.selected, data: dataWithTime}]
+                        this.outputCSV(dataWithTime)
                     }
                 ).catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
             }, addTime2xAxis(inputJson) {
-                let timestamp = new Date(this.input.date.selected).getTime();
-                let dataWithTime = [];
+                let timestamp = new Date(this.input.date.selected).getTime()
+                let dataWithTime = []
                 inputJson.data.forEach((item, index) => {
-                    dataWithTime[index] = [];
-                    dataWithTime[index].push(timestamp, Number.parseFloat(item).toFixed(1));
-                    timestamp += 900000;
-                });
-                return dataWithTime;
+                    dataWithTime[index] = []
+                    dataWithTime[index].push(timestamp, Number.parseFloat(item).toFixed(1))
+                    timestamp += 900000
+                })
+                return dataWithTime
             }, outputCSV(inputArray) {
-                let encodedUri = '';
-                this.output.csv.fileName = 'kw-' + this.input.date.selected + '.csv';
-                this.output.csv.content += '日期,' + this.input.date.selected + "\r\n" + "時間,需量" + "\r\n";
+                let encodedUri = ''
+                this.output.csv.fileName = 'kw-' + this.input.date.selected + '.csv'
+                this.output.csv.content += '日期,' + this.input.date.selected + "\r\n" + "時間,需量" + "\r\n"
                 inputArray.forEach((item) => {
-                    let row = this.timestamp2String(item[0]) + ',' + item[1];
-                    this.output.csv.content += row + "\r\n";
-                    encodedUri = encodeURI(this.output.csv.content);
-                });
-                this.output.csv.href = this.output.csv.header + encodedUri;
+                    let row = this.timestamp2String(item[0]) + ',' + item[1]
+                    this.output.csv.content += row + "\r\n"
+                    encodedUri = encodeURI(this.output.csv.content)
+                })
+                this.output.csv.href = this.output.csv.header + encodedUri
             }, timestamp2String(time) {
-                let datetime = new Date();
-                datetime.setTime(time);
-                const hour = datetime.getUTCHours();
-                const minute = datetime.getUTCMinutes();
-                const zero = (minute === 0) ? "0" : "";
-                return hour + ":" + minute + zero;
+                let datetime = new Date()
+                datetime.setTime(time)
+                const hour = datetime.getUTCHours()
+                const minute = datetime.getUTCMinutes()
+                const zero = (minute === 0) ? "0" : ""
+                return hour + ":" + minute + zero
             }
         }
     }

@@ -25,10 +25,18 @@
     </nav>
 </template>
 <script>
+    import axios from 'axios'
+    axios.defaults.withCredentials = true
+    const baseURL = "https://demo-site.ima-ems.com"
     export default {
         methods: {
             logout() {
-                this.$router.push('/');
+                this.$router.push('/')
+                axios.get(baseURL+"/api/user/logout").then(
+                    (response) => {
+                        console.log(response)
+                    }
+                )
             }
         }
     }

@@ -17,8 +17,8 @@
 
 </template>
 <script>
-    import axios from 'axios';
-
+    import axios from 'axios'
+    axios.defaults.withCredentials = true
     export default {
         data() {
             return {
@@ -29,29 +29,31 @@
         },
         methods: {
             login() {
-                let formValue = new FormData();
-                const baseURL = "https://demo-site.ima-ems.com";
-                const path = baseURL + "/api/user/login";
-                formValue.append("email", this.email);
-                formValue.append("password", this.password);
+                let formValue = new FormData()
+                const baseURL = "https://demo-site.ima-ems.com"
+                const path = baseURL + "/api/user/login"
+                formValue.append("email", this.email)
+                formValue.append("password", this.password)
                 let config = {
 
                     email: this.email,
                     password: this.password,
 
-                };
+                }
                 axios.post(path, config).then(
                     (response) => {
-                        console.log(response);
+                        console.log(response)
                         if (response.status === 200) {
-                            this.$router.push('/real-time');
+                            console.log(response.headers
+                            )
+                            this.$router.push('/real-time')
                         }
                         else {
-                            alert('login failed');
+                            alert('login failed')
                         }
                     }
                 ).catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
             }
         }

@@ -3,8 +3,8 @@ import app from './App.vue'
 import router from './router'
 import VueApexCharts from 'vue-apexcharts'
 import 'default-passive-events'
-import "jquery";
-import "bootstrap/dist/js/bootstrap.js";
+import "jquery"
+import "bootstrap/dist/js/bootstrap.js"
 
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)

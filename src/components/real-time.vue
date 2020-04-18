@@ -4,9 +4,15 @@
     padding: 1em;
     margin-top: -15px;">
             <ul class="list-group text-left" style="list-style: none">
-                <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/real-time">即時用電量</router-link></li>
-                <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/heatmap">每日用電熱圖</router-link></li>
-                <li style="line-height: 40px;"><router-link style="color: white" class="col-2" to="/area">每十五分鐘需量</router-link></li>
+                <li style="line-height: 40px;">
+                    <router-link style="color: white" class="col-2" to="/real-time">即時用電量</router-link>
+                </li>
+                <li style="line-height: 40px;">
+                    <router-link style="color: white" class="col-2" to="/heatmap">每日用電熱圖</router-link>
+                </li>
+                <li style="line-height: 40px;">
+                    <router-link style="color: white" class="col-2" to="/area">每十五分鐘需量</router-link>
+                </li>
                 <li style="line-height: 40px;">
                     <!--<a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>-->
                     <router-link style="color: white" class="col-2" to="/">登出系統</router-link>
@@ -31,7 +37,7 @@
                         </button>
                     </div>
                     <div class="col-lg-3 col-md-12 mt-4">
-                        <span  style="color: white;line-height: 35px" >下一次資料更新時間為：{{output.countdown}} 秒後</span>
+                        <span style="color: white;line-height: 35px">下一次資料更新時間為：{{output.countdown}} 秒後</span>
                     </div>
                 </div>
             </form>
@@ -89,8 +95,9 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    console.log(axios.default);
+    import axios from 'axios'
+    axios.defaults.withCredentials = true
+    const baseURL = "https://demo-site.ima-ems.com"
     export default {
         data: () => {
             return {
@@ -185,56 +192,60 @@
         },
         methods: {
             onSubmit(e) {
-                e.preventDefault();
-                this.get.params.place_id = this.input.placeID.selected;
-                const baseURL = "https://demo-site.ima-ems.com";
-                const path = baseURL + "/api/realtime";
-                this.getData(path);
-                this.countDown();
+                e.preventDefault()
+                this.get.params.place_id = this.input.placeID.selected
+                const path2data = baseURL + "/api/realtime"
+                this.getData(path2data)
+                this.countDown()
                 setInterval(() => {
-                    this.getData(path);
-                }, 60000);
+                    this.getData(path2data)
+                }, 60000)
             }, showLine() {
-                let appendTime = new Date().getTime();
-                console.log(this.apex.series[0]);
+                let appendTime = new Date().getTime()
+                console.log(this.apex.series[0])
                 this.$refs.line.appendData([{data: [[appendTime + 28800000, this.output.lists[2].value]]}])
             }, getData(path) {
-                const request = axios.create({
-                    withCredentials: true
-                });
-
-                request.get(path, this.get).then(
+                axios.get(path, this.get).then(
                     (response) => {
-                        console.log(response);
-                        let realTimeData = response.data;
+                        console.log(response)
+                        let realTimeData = response.data
                         if (realTimeData.status === "success") {
-                            let valueList = realTimeData.data[0][1];
+                            let valueList = realTimeData.data[1]
+                            console.log(valueList)
                             valueList.forEach((item, index) => {
                                 if (index === 0) {
-                                    this.output.dateTime = item;
+                                    this.output.dateTime = item
                                 } else {
                                     if (item !== "None" && index !== 12) {
-                                        this.output.lists[index - 1].value = Number.parseFloat(item).toFixed(1);
+                                        this.output.lists[index - 1].value = Number.parseFloat(item).toFixed(1)
                                     } else {
-                                        this.output.lists[index - 1].value = item;
+                                        this.output.lists[index - 1].value = item
                                     }
                                 }
                             })
 
                         }
-                        this.showLine();
+                        this.showLine()
                     }
                 ).catch(error => {
-                    console.log(error);
+                    console.log(error)
                 })
             }, countDown() {
                 setInterval(() => {
-                    this.output.countdown--;
+                    this.output.countdown--
                     if (this.output.countdown === 0) {
-                        this.output.countdown = 60;
+                        this.output.countdown = 60
                     }
-                }, 1000);
+                }, 1000)
             }
         },
+        beforeMount() {
+            const path2lists = baseURL + "/api/user/lists"
+            axios.get(path2lists).then(
+                (response) => {
+                    console.log(response)
+                }
+            )
+        }
     }
 </script>
