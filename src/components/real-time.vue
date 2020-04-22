@@ -102,7 +102,6 @@
 </template>
 <script>
     import axios from 'axios'
-
     axios.defaults.withCredentials = true
     const baseURL = "https://demo-site.ima-ems.com"
     export default {

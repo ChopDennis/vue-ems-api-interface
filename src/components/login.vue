@@ -44,6 +44,8 @@
                         if (response.status === 200) {
                             this.message = '登入成功！'
                             const delayInMilliseconds = 1500;
+//                            this.setCookie('login', true, 1)
+                            document.cookie = "login=true;";
                             setTimeout(() => {
                                 this.$router.push('/real-time')
                             }, delayInMilliseconds);
@@ -56,6 +58,12 @@
                     console.log(error)
                     alert('登入失敗，帳號或密碼錯誤')
                 })
+            },
+            setCookie(cname, cvalue, exdays) {
+                let d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                let expires = "expires=" + d.toUTCString();
+                document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
             }
         }
     }
