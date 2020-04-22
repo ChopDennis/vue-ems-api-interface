@@ -35,8 +35,11 @@
                 axios.get(baseURL+"/api/user/logout").then(
                     (response) => {
                         console.log(response)
+                        alert("已登出系統，請重新登入")
                     }
-                )
+                ).catch(error => {
+                    console.log(error)
+                })
             }
         }
     }

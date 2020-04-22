@@ -23,16 +23,17 @@
             <form class="form-group" @submit="onSubmit">
                 <div class="row">
                     <div class="col-lg-2 col-md-6">
-                        <label for="deviceID"></label>
-                        <select class="form-control" id="deviceID" v-model="input.placeID.selected">
+                        <label for="placeID"></label>
+                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼"/>
+                        <select v-else="" class="form-control" id="placeID" v-model="input.placeID.selected">
                             <option value="" disabled selected>選擇電錶號碼</option>
-                            <option v-for="option in input.placeID.options" :key="option.id" :value="option.text">
-                                {{option.text}}
+                            <option v-for="(item, key) in input.placeID.options" :value="item" :key="key">
+                                {{key}}
                             </option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <button class="btn btn-info mt-4" style="width: 80%" type="submit">
+                        <button @click="resetApex" class="btn btn-info mt-4" style="width: 80%" type="submit">
                             送出查詢資料
                         </button>
                     </div>
@@ -89,36 +90,21 @@
                 </div>
             </div>
             <p class="mt-4" style="color: white">即時需量變化表（每一分鐘更新）</p>
-            <apexchart class="mt-3" ref="line" :height="apex.height" type="line" :options="apex.chartOptions"
+            <apexchart class="mt-3" ref="line" id="apexchart" :height="apex.height" type="line"
+                       :options="apex.chartOptions"
                        :series="apex.series"></apexchart>
         </div>
     </div>
 </template>
 <script>
     import axios from 'axios'
+
     axios.defaults.withCredentials = true
     const baseURL = "https://demo-site.ima-ems.com"
     export default {
         data: () => {
             return {
-                input: {
-                    placeID: {
-                        selected: '',
-                        options: [
-                            {
-                                id: 1, text: '16274114w00_010se'
-                            }, {
-                                id: 2, text: '16484660100_010se'
-                            }, {
-                                id: 3, text: '16484851013_010se'
-                            }, {
-                                id: 4, text: '16484840019_010se'
-                            }, {
-                                id: 5, text: '16484740018_010se'
-                            }
-                        ],
-                    },
-                },
+                admin: false,
                 apex: {
                     height: 500,
                     chartOptions: {
@@ -154,6 +140,12 @@
                     params: {
                         place_id: ''
                     }
+                },
+                input: {
+                    placeID: {
+                        selected: '',
+                        options: {},
+                    },
                 },
                 output: {
                     dateTime: '',
@@ -196,22 +188,18 @@
                 this.get.params.place_id = this.input.placeID.selected
                 const path2data = baseURL + "/api/realtime"
                 this.getData(path2data)
-                this.countDown()
                 setInterval(() => {
                     this.getData(path2data)
                 }, 60000)
             }, showLine() {
                 let appendTime = new Date().getTime()
-                console.log(this.apex.series[0])
                 this.$refs.line.appendData([{data: [[appendTime + 28800000, this.output.lists[2].value]]}])
             }, getData(path) {
                 axios.get(path, this.get).then(
                     (response) => {
-                        console.log(response)
                         let realTimeData = response.data
                         if (realTimeData.status === "success") {
                             let valueList = realTimeData.data[1]
-                            console.log(valueList)
                             valueList.forEach((item, index) => {
                                 if (index === 0) {
                                     this.output.dateTime = item
@@ -223,7 +211,6 @@
                                     }
                                 }
                             })
-
                         }
                         this.showLine()
                     }
@@ -237,13 +224,20 @@
                         this.output.countdown = 60
                     }
                 }, 1000)
+            }, resetApex() {
+                this.countDown()
+                this.$refs.line.updateSeries([{
+                    data: []
+                }])
+                console.log("Reset")
             }
         },
         beforeMount() {
             const path2lists = baseURL + "/api/user/lists"
             axios.get(path2lists).then(
                 (response) => {
-                    console.log(response)
+                    this.admin = (response.data.permission === 1)
+                    this.input.placeID.options = Object.assign({}, response.data.places)
                 }
             )
         }

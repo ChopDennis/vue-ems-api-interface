@@ -23,11 +23,12 @@
             <form class="form-group" @submit="onSubmit">
                 <div class="row">
                     <div class="col-lg-2 col-md-12">
-                        <label for="deviceID"></label>
-                        <select class="form-control" id="deviceID" v-model="input.deviceID.selected">
+                        <label for="placeID"></label>
+                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼"/>
+                        <select v-else="" class="form-control" id="placeID" v-model="input.placeID.selected">
                             <option value="" disabled selected>選擇電錶號碼</option>
-                            <option v-for="option in input.deviceID.options" :key="option.id" :value="option.text">
-                                {{option.text}}
+                            <option v-for="(item, key) in input.placeID.options" :value="item" :key="key">
+                                {{key}}
                             </option>
                         </select>
                     </div>
@@ -62,38 +63,11 @@
 <script>
     import axios from 'axios'
     axios.defaults.withCredentials = true
+    const baseURL = "https://demo-site.ima-ems.com"
     export default {
         data: () => {
             return {
-                input: {
-                    deviceID: {
-                        selected: '',
-                        options: [
-                            {
-                                id: 1, text: '16274114w00_010se'
-                            }, {
-                                id: 2, text: '16484660100_010se'
-                            }, {
-                                id: 3, text: '16484851013_010se'
-                            }, {
-                                id: 4, text: '16484840019_010se'
-                            }, {
-                                id: 5, text: '16484740018_010se'
-                            }
-                        ],
-                    },
-                    date: {
-                        selected: '',
-                    },
-                },
-                output: {
-                    csv: {
-                        href: '',
-                        fileName: '',
-                        header: "data:text/csv;charset=utf-8,%EF%BB%BF",
-                        content: ''
-                    }
-                },
+                admin:false,
                 apex: {
                     height: window.innerHeight - 200,
                     chartOptions: {
@@ -130,16 +104,32 @@
                         }
                     },
                     series: [],
-                }
+                },
+                input: {
+                    placeID: {
+                        selected: '',
+                        options: {}
+                    },
+                    date: {
+                        selected: '',
+                    },
+                },
+                output: {
+                    csv: {
+                        href: '',
+                        fileName: '',
+                        header: "data:text/csv;charset=utf-8,%EF%BB%BF",
+                        content: ''
+                    }
+                },
             }
         },
         methods: {
             onSubmit(e) {
                 e.preventDefault()
                 let formValue = new FormData()
-                const baseURL = "https://demo-site.ima-ems.com"
                 const path = baseURL + "/api/analytic/kw_summary"
-                formValue.append("device_id", this.input.deviceID.selected)
+                formValue.append("device_id", this.input.placeID.selected)
                 formValue.append("check_day", this.input.date.selected)
                 axios.post(path, formValue).then(
                     (response) => {
@@ -178,6 +168,14 @@
                 const zero = (minute === 0) ? "0" : ""
                 return hour + ":" + minute + zero
             }
+        },beforeMount() {
+            const path2lists = baseURL + "/api/user/lists"
+            axios.get(path2lists).then(
+                (response) => {
+                    this.admin = (response.data.permission===1)
+                    this.input.placeID.options = Object.assign({}, response.data.places)
+                }
+            )
         }
     }
 </script>
