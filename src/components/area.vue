@@ -36,6 +36,10 @@
                         <label for="date"></label>
                         <input class="form-control" type="date" id="date" v-model="input.date.selected">
                     </div>
+                    <div v-if="admin" class="col-lg-2 col-md-12">
+                        <label for="server_ip"></label>
+                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip" v-model="input.server_ip">
+                    </div>
                     <div class="col-lg-6 col-md-12">
                         <div class="row">
                             <div class="col-6 mt-4">
@@ -113,6 +117,7 @@
                     date: {
                         selected: '',
                     },
+                    server_ip:''
                 },
                 output: {
                     csv: {
@@ -131,6 +136,7 @@
                 const path = baseURL + "/api/analytic/kw_summary"
                 formValue.append("device_id", this.input.placeID.selected)
                 formValue.append("check_day", this.input.date.selected)
+                formValue.append("server_ip", this.input.server_ip)
                 axios.post(path, formValue).then(
                     (response) => {
                         console.log(response)

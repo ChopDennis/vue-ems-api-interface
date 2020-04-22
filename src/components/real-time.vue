@@ -32,6 +32,10 @@
                             </option>
                         </select>
                     </div>
+                    <div v-if="admin" class="col-lg-2 col-md-6">
+                        <label for="server_ip"></label>
+                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip" v-model="input.server_ip">
+                    </div>
                     <div class="col-lg-3 col-md-6">
                         <button @click="resetApex" class="btn btn-info mt-4" style="width: 80%" type="submit">
                             送出查詢資料
@@ -138,7 +142,8 @@
                 },
                 get: {
                     params: {
-                        place_id: ''
+                        place_id: '',
+                        server_ip: ''
                     }
                 },
                 input: {
@@ -229,7 +234,6 @@
                 this.$refs.line.updateSeries([{
                     data: []
                 }])
-                console.log("Reset")
             }
         },
         beforeMount() {

@@ -46,7 +46,12 @@
                             </option>
                         </select>
                     </div>
-                    <div class="col-lg-6 col-md-12">
+                    <div v-if="admin" class="col-lg-2 col-md-12">
+                        <label for="server_ip"></label>
+                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip"
+                               v-model="input.server_ip">
+                    </div>
+                    <div class="col-lg-4 col-md-12">
                         <div class="row">
                             <div class="col-6 mt-4">
                                 <button class=" btn btn-info" type="submit" style="width: 80%">
@@ -60,8 +65,6 @@
                                 </button>
                             </div>
                         </div>
-
-
                     </div>
                 </div>
                 <div class="text-center py-3">
@@ -75,6 +78,7 @@
 </template>
 <script>
     import axios from 'axios'
+
     axios.defaults.withCredentials = true
     const baseURL = "https://demo-site.ima-ems.com"
     export default {
@@ -112,6 +116,7 @@
                     days: {
                         selected: '',
                     },
+                    server_ip: ''
                 },
                 output: {
                     total: 0,
@@ -201,6 +206,7 @@
                 formValue.append("device_id", this.input.placeID.selected)
                 formValue.append("check_day", this.input.date.selected)
                 formValue.append("days", this.input.days.selected)
+                formValue.append("server_ip", this.input.server_ip)
                 axios.post(path, formValue).then(
                     (response) => {
                         let heatmapData = response.data
@@ -294,7 +300,7 @@
             const path2lists = baseURL + "/api/user/lists"
             axios.get(path2lists).then(
                 (response) => {
-                    this.admin = (response.data.permission===1)
+                    this.admin = (response.data.permission === 1)
                     this.input.placeID.options = Object.assign({}, response.data.places)
                 }
             )

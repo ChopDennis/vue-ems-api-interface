@@ -43,7 +43,7 @@
                     (response) => {
                         if (response.status === 200) {
                             this.message = '登入成功！'
-                            const delayInMilliseconds = 2000;
+                            const delayInMilliseconds = 1500;
                             setTimeout(() => {
                                 this.$router.push('/real-time')
                             }, delayInMilliseconds);
