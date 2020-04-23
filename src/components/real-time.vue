@@ -15,7 +15,7 @@
                 </li>
                 <li style="line-height: 40px;">
                     <!--<a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>-->
-                    <router-link style="color: white" class="col-2" to="/">登出系統</router-link>
+                    <a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>
                 </li>
             </ul>
         </div>
@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-6">
                         <label for="placeID"></label>
-                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼"/>
+                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼" v-model="input.placeID.selected"/>
                         <select v-else="" class="form-control" id="placeID" v-model="input.placeID.selected">
                             <option value="" disabled selected>選擇電錶號碼</option>
                             <option v-for="(item, key) in input.placeID.options" :value="item" :key="key">
@@ -34,7 +34,7 @@
                     </div>
                     <div v-if="admin" class="col-lg-2 col-md-6">
                         <label for="server_ip"></label>
-                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip" v-model="input.server_ip">
+                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip" v-model="get.params.server_ip">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <button @click="resetApex" class="btn btn-info mt-4" style="width: 80%" type="submit">
@@ -233,6 +233,17 @@
                 this.$refs.line.updateSeries([{
                     data: []
                 }])
+            },logout() {
+                this.$router.push('/')
+                axios.get(baseURL + "/api/user/logout").then(
+                    (response) => {
+                        console.log(response)
+                        document.cookie = "login=false;";
+                        alert("已登出系統，請重新登入")
+                    }
+                ).catch(error => {
+                    console.log(error)
+                })
             }
         },
         beforeMount() {

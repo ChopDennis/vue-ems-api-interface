@@ -15,7 +15,7 @@
                 </li>
                 <li style="line-height: 40px;">
                     <!--<a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>-->
-                    <router-link style="color: white" class="col-2" to="/">登出系統</router-link>
+                    <a style="color: white" class="col-2" href="" @click.prevent="logout">登出系統</a>
                 </li>
             </ul>
         </div>
@@ -24,7 +24,7 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-12">
                         <label for="placeID"></label>
-                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼"/>
+                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼" v-model="input.placeID.selected"/>
                         <select v-else="" class="form-control" id="placeID" v-model="input.placeID.selected">
                             <option value="" disabled selected>選擇電錶號碼</option>
                             <option v-for="(item, key) in input.placeID.options" :value="item" :key="key">
@@ -38,7 +38,7 @@
                     </div>
                     <div class="col-lg-2 col-md-12">
                         <label for="days"></label>
-                        <input v-if="admin" class="form-control" type="text" placeholder="輸入顯示天數"/>
+                        <input v-if="admin" class="form-control" type="text" placeholder="輸入顯示天數" v-model="input.days.selected"/>
                         <select v-else="" class="form-control" id="days" v-model="input.days.selected">
                             <option value="" disabled selected>選擇顯示天數</option>
                             <option v-for="days in 31" :key="days">
@@ -294,6 +294,18 @@
                 })
                 this.output.total = totalOfDay.reduce(reducer)
                 return totalOfDay
+            },
+            logout() {
+                this.$router.push('/')
+                axios.get(baseURL + "/api/user/logout").then(
+                    (response) => {
+                        console.log(response)
+                        document.cookie = "login=false;";
+                        alert("已登出系統，請重新登入")
+                    }
+                ).catch(error => {
+                    console.log(error)
+                })
             }
         },
         beforeMount() {
@@ -304,6 +316,6 @@
                     this.input.placeID.options = Object.assign({}, response.data.places)
                 }
             )
-        },
+        }
     }
 </script>
