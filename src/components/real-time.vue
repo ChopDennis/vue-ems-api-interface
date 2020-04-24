@@ -24,7 +24,8 @@
                 <div class="row">
                     <div class="col-lg-2 col-md-6">
                         <label for="placeID"></label>
-                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼" v-model="input.placeID.selected"/>
+                        <input v-if="admin" class="form-control" type="text" placeholder="輸入電錶號碼"
+                               v-model="input.placeID.selected"/>
                         <select v-else="" class="form-control" id="placeID" v-model="input.placeID.selected">
                             <option value="" disabled selected>選擇電錶號碼</option>
                             <option v-for="(item, key) in input.placeID.options" :value="item" :key="key">
@@ -34,7 +35,8 @@
                     </div>
                     <div v-if="admin" class="col-lg-2 col-md-6">
                         <label for="server_ip"></label>
-                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip" v-model="get.params.server_ip">
+                        <input class="form-control" type="text" placeholder="輸入伺服器位置" id="server_ip"
+                               v-model="get.params.server_ip">
                     </div>
                     <div class="col-lg-3 col-md-6">
                         <button @click="resetApex" class="btn btn-info mt-4" style="width: 80%" type="submit">
@@ -102,8 +104,10 @@
 </template>
 <script>
     import axios from 'axios'
+
     axios.defaults.withCredentials = true
-    const baseURL = "https://demo-site.ima-ems.com"
+    //    const baseURL = "https://demo-site.ima-ems.com"
+    const baseURL = ""
     export default {
         data: () => {
             return {
@@ -233,7 +237,7 @@
                 this.$refs.line.updateSeries([{
                     data: []
                 }])
-            },logout() {
+            }, logout() {
                 this.$router.push('/')
                 axios.get(baseURL + "/api/user/logout").then(
                     (response) => {

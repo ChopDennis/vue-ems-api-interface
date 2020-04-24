@@ -20,7 +20,8 @@
 <script>
     import axios from 'axios'
 
-    const baseURL = "https://demo-site.ima-ems.com"
+//    const baseURL = "https://demo-site.ima-ems.com"
+    const baseURL = ""
     axios.defaults.withCredentials = true
     export default {
         data() {
