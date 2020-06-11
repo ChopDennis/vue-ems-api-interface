@@ -5,6 +5,7 @@ import VueApexCharts from 'vue-apexcharts'
 import 'default-passive-events'
 import "jquery"
 import "bootstrap/dist/js/bootstrap.js"
+import {store} from "./store/"
 
 Vue.use(VueApexCharts)
 Vue.component('apexchart', VueApexCharts)
@@ -21,7 +22,9 @@ router.beforeEach((to, from, next )=>{
             next();
     }
 })
+
 new Vue({
+    store:store,
     router,
     render: h => h(app)
 }).$mount('#app')

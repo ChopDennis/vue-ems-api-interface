@@ -1,0 +1,57 @@
+Login:
+POST /api/user/login
+    - Request
+    {
+        "email": "",
+        "password": ""
+    }
+
+    - Response
+    {"status": "success"}
+    403, 401
+
+Logout:
+GET  /api/user/logout
+    - Response
+    {"status": "success"}
+
+Get device list:
+GET  /api/user/lists
+    - Response
+    {
+        "permission": 0,
+        "places": {
+            "shown_name": "device_id"
+        }
+    },
+    {
+        "permission": 1
+    }
+
+kwh_summary:
+POST /api/analytic/kwh_summary
+    - Request (admin) (form)
+    {
+        "device_id": "",
+        "check_day": "",
+        "days": "",
+        "server_ip": ""
+    }
+
+kw_summary:
+POST /api/analytic/kw_summary
+    - Request (admin) (form)
+    {
+        "device_id": "",
+        "check_day": "",
+        "server_ip": ""
+    }
+
+
+3000:
+POST /api/realtime
+    - Request (admin) (JSON)
+    {
+        "place_id": "",
+        "server_ip": ""
+    }

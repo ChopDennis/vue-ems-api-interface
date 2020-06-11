@@ -314,11 +314,10 @@
                     }
                 }
                 this.apex.series = heatmapData
-            },
-            onSubmit(e) {
+            }, onSubmit(e) {
                 e.preventDefault()
                 let formValue = new FormData()
-                const path = baseURL + "/api/analytic/kwh_summary"
+                const path = baseURL + "/api/analytic/kw_summary/range"
                 formValue.append("device_id", this.input.placeID.selected)
                 formValue.append("check_day", this.input.date.selected)
                 formValue.append("days", this.input.days.selected)
@@ -335,14 +334,12 @@
                     }).catch(error => {
                     console.log(error)
                 })
-            },
-            modifyName(inputArray, dataList) {
+            }, modifyName(inputArray, dataList) {
                 inputArray.forEach((item, index) => {
                     item.name = item.name.replace('2020-', '')
                     item.name += '（' + dataList[index] + '）'
                 })
-            },
-            modifyData(inputArray) {
+            }, modifyData(inputArray) {
                 inputArray.forEach((item, index, thisArray) => {
                     thisArray[index].data.forEach((data, dataIndex, dataArray) => {
                         let data_min = Infinity
@@ -358,30 +355,26 @@
                         }
                     })
                 })
-            },
-            findMaximum(inputArray) {
+            }, findMaximum(inputArray) {
                 let dataList = []
                 inputArray.forEach((item) => {
                     dataList.push(Math.max(...item.data))
                 })
                 return Math.max(...dataList)
-            },
-            findMinimum(inputArray) {
+            }, findMinimum(inputArray) {
                 let dataList = []
                 inputArray.forEach((item) => {
                     dataList.push(Math.min(...item.data))
                 })
                 return Math.min(...dataList)
-            },
-            setPercent(upperLimit, lowerLimit) {
+            }, setPercent(upperLimit, lowerLimit) {
                 let percent = []
                 const step = Math.floor((upperLimit - lowerLimit) / 10)
                 for (let i = 1, j = 1; i < 10; i++) {
                     percent[i] = lowerLimit + step * j++
                 }
                 return percent
-            },
-            percent2color(percent) {
+            }, percent2color(percent) {
                 let r, g, b = 0
                 if (percent < 40) {
                     g = 180
@@ -397,8 +390,7 @@
                 }
                 let h = r * 0x10000 + g * 0x100 + b * 0x1
                 return '#' + ('000000' + h.toString(16)).slice(-6)
-            },
-            outputCSV(inputArray) {
+            }, outputCSV(inputArray) {
                 let encodedUri = ''
                 this.output.csv.fileName = 'heatmap-' + this.input.date.selected + '-' + this.input.days.selected + '.csv'
                 inputArray.forEach((item) => {
@@ -409,8 +401,7 @@
                     encodedUri = encodeURI(this.output.csv.content)
                 })
                 this.output.csv.href = this.output.csv.header + encodedUri
-            },
-            sumTotal(inputArray) {
+            }, sumTotal(inputArray) {
                 let totalOfDay = []
                 const reducer = (accumulator, currentValue) => accumulator + currentValue
                 inputArray.forEach((item, index) => {

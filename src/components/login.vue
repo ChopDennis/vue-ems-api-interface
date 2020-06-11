@@ -1,27 +1,47 @@
 <template>
-    <div style="height: 100vh">
-        <div style="color:white;background-color: rgba(255, 255, 255, 0.13);border-radius: 7px;padding: 1rem"
-             class="w-75 mx-auto my-5">
-            <h1>登入 EMS</h1>
-            <form @submit.prevent="login" class="form-group">
-                <label for="email">輸入信箱：</label>
-                <input id="email" class="form-control col-lg-6 m-auto" type="email" v-model="input.email" required>
-                <br>
-                <label for="pwd">輸入密碼：</label>
-                <input id="pwd" class="form-control col-lg-6 m-auto" type="password" v-model="input.password" required>
-                <br>
-                <button type="submit" class="btn-info btn">登入</button>
-            </form>
-        </div>
-        <h3>{{message}}</h3>
+  <div style="height: 100vh">
+    <div
+      style="color:white;background-color: rgba(255, 255, 255, 0.13);border-radius: 7px;padding: 1rem"
+      class="w-75 mx-auto my-5"
+    >
+      <h1>登入 EMS</h1>
+      <form
+        class="form-group"
+        @submit.prevent="login"
+      >
+        <label for="email">輸入信箱：</label>
+        <input
+          id="email"
+          v-model="input.email"
+          class="form-control col-lg-6 m-auto"
+          type="email"
+          required
+        >
+        <br>
+        <label for="pwd">輸入密碼：</label>
+        <input
+          id="pwd"
+          v-model="input.password"
+          class="form-control col-lg-6 m-auto"
+          type="password"
+          required
+        >
+        <br>
+        <button
+          type="submit"
+          class="btn-info btn"
+        >
+          登入
+        </button>
+      </form>
     </div>
-
+    <h3>{{ message }}</h3>
+  </div>
 </template>
 <script>
     import axios from 'axios'
-
 //    const baseURL = "https://demo-site.ima-ems.com"
-    const baseURL = ""
+//    const baseURL = ""
     axios.defaults.withCredentials = true
     export default {
         data() {
@@ -35,7 +55,7 @@
         },
         methods: {
             login() {
-                const path = baseURL + "/api/user/login"
+                const path = this.$store.state.axios.baseURL + "/api/user/login"
                 let config = {
                     email: this.input.email,
                     password: this.input.password,
@@ -43,6 +63,8 @@
                 axios.post(path, config).then(
                     (response) => {
                         if (response.status === 200) {
+                            console.log(response)
+                            console.log(document.session)
                             this.message = '登入成功！'
                             const delayInMilliseconds = 1500;
 //                            this.setCookie('login', true, 1)
