@@ -1,47 +1,29 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Heatmap from '../components/heatmap.vue'
-import Area from '../components/area.vue'
-import Header from '../components/header.vue'
-import RealTime from '../components/real-time.vue'
-import HeatmapMonth from '../components/heatmap-month.vue'
-
-
+// import Heatmap from '../components/heatmap.vue'
+// import Area from '../components/area.vue'
+// import Header from '../components/header.vue'
+// import RealTime from '../components/real-time.vue'
+// import HeatmapMonth from '../components/heatmap-month.vue'
+import PageLogin from "../views/PageLogin";
+import PageRealTime from "../views/PageRealTime";
 Vue.use(VueRouter)
 
 const routes = [
     {
         path: '/',
-        component: () => import('../components/login.vue')
-    },
-    {
-        path: '/heatmap',
+        name: 'PageLogin',
         components: {
-            default: Heatmap,
-            nav: Header
+            default: PageLogin,
         }
-    },
-    {
-        path: '/area',
-        components: {
-            default: Area,
-            nav: Header
-        }
-    },
-    {
-        path: '/heatmap-month',
-        components: {
-            default: HeatmapMonth,
-            nav: Header
-        }
-    },
-    {
+    },{
         path: '/real-time',
+        name: 'PageRealTime',
         components: {
-            default: RealTime,
-            nav: Header
+            default: PageRealTime,
         }
-    }
+    },
+
 ]
 
 const router = new VueRouter({

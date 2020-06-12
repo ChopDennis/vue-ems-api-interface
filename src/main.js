@@ -2,12 +2,20 @@ import Vue from 'vue'
 import app from './App.vue'
 import router from './router'
 import VueApexCharts from 'vue-apexcharts'
-import 'default-passive-events'
-import "jquery"
-import "bootstrap/dist/js/bootstrap.js"
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import axios from  'axios'
+import VueAxios from "vue-axios";
+axios.defaults.withCredentials = true
+Vue.use(VueAxios, axios)
 import {store} from "./store/"
 
+
 Vue.use(VueApexCharts)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
+
 Vue.component('apexchart', VueApexCharts)
 
 Vue.config.productionTip = false

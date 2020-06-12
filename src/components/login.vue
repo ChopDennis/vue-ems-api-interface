@@ -1,7 +1,7 @@
 <template>
   <div style="height: 100vh">
     <div
-      style="color:white;background-color: rgba(255, 255, 255, 0.13);border-radius: 7px;padding: 1rem"
+      style="color:white;"
       class="w-75 mx-auto my-5"
     >
       <h1>登入 EMS</h1>
