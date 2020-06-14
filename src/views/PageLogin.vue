@@ -9,9 +9,11 @@
     >
       <b-card
         bg-variant="dark"
-        class="mb-3"
+        class="mb-3 px-md-5"
       >
-        <h2>登入 EMS 系統</h2>
+        <h2 class="text-center mb-3">
+          登入 EMS 系統
+        </h2>
         <b-form-group
           label-cols-sm="3"
           label="輸入信箱："
@@ -38,16 +40,23 @@
             required
           />
         </b-form-group>
+
         <b-button
           type="submit"
+          class="d-block m-auto"
           @click="loginEMS()"
         >
           登入
         </b-button>
       </b-card>
-      <h3 class="text-center">
-        {{ message }}
-      </h3>
+      <b-alert
+        :show="alert"
+        variant="success"
+        fade
+        class="text-center"
+      >
+        登入成功！
+      </b-alert>
     </b-container>
   </div>
 </template>
@@ -61,7 +70,7 @@
                     email: '',
                     password: ''
                 },
-                message: ''
+                alert: false
             }
         },
         methods: {
@@ -71,7 +80,7 @@
                 this.axios.post(path, this.input).then(
                     (response) => {
                         if (response.status === 200) {
-                            this.message = '登入成功！'
+                            this.alert = true
                             document.cookie = "login=true;";
                             setTimeout(() => {
                                 this.$router.push('/real-time')
@@ -82,8 +91,7 @@
                     }
                 ).catch(
                     error => {
-                        console.log(error)
-                        alert('登入失敗，帳號或密碼錯誤')
+                        alert(error + '登入失敗，帳號或密碼錯誤')
                     }
                 )
             }

@@ -11,18 +11,18 @@
           label-cols-sm="3"
           label="電錶號碼："
           label-align-sm="right"
-          label-for="real-time-place-id"
+          label-for="heatmap-place-id"
         >
           <b-form-input
             v-if="admin"
-            id="real-time-place-id"
+            id="heatmap-place-id"
             v-model="selected.place_id"
             type="text"
             placeholder="輸入電錶號碼"
           />
           <b-form-select
             v-else
-            id="real-time-place-id"
+            id="heatmap-place-id"
             v-model="selected.place_id"
           >
             <option
@@ -46,10 +46,10 @@
           label-cols-sm="3"
           label="伺服器位置："
           label-align-sm="right"
-          label-for="real-time-server-ip"
+          label-for="heatmap-server-ip"
         >
           <b-form-select
-            id="real-time-server-ip"
+            id="heatmap-server-ip"
             v-model="selected.server_ip"
           >
             <option
@@ -68,6 +68,43 @@
             </option>
           </b-form-select>
         </b-form-group>
+        <b-form-group
+          label-cols-sm="3"
+          label="日期："
+          label-align-sm="right"
+          label-for="heatmap-date"
+        >
+          <b-form-input
+            id="heatmap-date"
+            v-model="selected.date"
+            type="date"
+          />
+        </b-form-group>
+        <b-form-group
+          label-cols-sm="3"
+          label="顯示天數："
+          label-align-sm="right"
+          label-for="heatmap-days"
+        >
+          <b-form-select
+            id="heatmap-days"
+            v-model="selected.days"
+          >
+            <option
+              value=""
+              disabled
+              selected
+            >
+              選擇顯示天數
+            </option>
+            <option
+              v-for="days in 31"
+              :key="days"
+            >
+              {{ days }}
+            </option>
+          </b-form-select>
+        </b-form-group>
         <b-button
           type="submit"
           class="m-auto d-block"
@@ -81,7 +118,7 @@
 
 <script>
     export default {
-        name: "RealTimeInputForm",
+        name: "HeatmapInputForm",
         data() {
             return {
                 admin: false,
@@ -94,7 +131,9 @@
                 },
                 selected: {
                     place_id: "",
-                    server_ip: ""
+                    server_ip: "",
+                    date: "",
+                    days: ""
                 },
                 get: {
                     params: Object
@@ -113,17 +152,18 @@
         methods: {
             onSubmit(e) {
                 e.preventDefault()
-                this.getRealTimeData()
-            },
-            getRealTimeData() {
-                this.get.params = this.selected
-                this.axios.get(this.$store.state.axios.baseURL + "/api/realtime", this.get).then(
+                let HeatmapFormValue = new FormData()
+                HeatmapFormValue.append("device_id", this.selected.place_id)
+                HeatmapFormValue.append("check_day", this.selected.date)
+                HeatmapFormValue.append("days", this.selected.days)
+                HeatmapFormValue.append("server_ip", this.selected.server_ip)
+                this.axios.post(this.$store.state.axios.baseURL + "/api/analytic/kwh_summary", HeatmapFormValue).then(
                     (response) => {
-                        this.$store.commit('setRealTimeData',response.data)
+                        this.$store.commit("setHeatmapData",response.data)
                         this.$emit('get-responded-data')
                     }
                 )
-            }
+            },
         }
     }
 </script>

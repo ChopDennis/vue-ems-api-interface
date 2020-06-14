@@ -9,17 +9,24 @@ export const store = new Vuex.Store({
             baseURL: "https://demo-site.ima-ems.com"
         },
         response: {
-            real_time: Object
+            real_time: Object,
+            heatmap: Object
         }
     },
     mutations: {
         setRealTimeData(state, payload) {
             state.response.real_time = payload
+        },
+        setHeatmapData(state, payload) {
+            state.response.heatmap = payload
         }
     },
     getters: {
-        RespondedRealTimeData(state){
+        RespondedRealTimeData(state) {
             return state.response.real_time
-        }
+        },
+        RespondedHeatmapData(state) {
+            return state.response.heatmap
+        },
     }
 })
