@@ -29,19 +29,19 @@
               即時用電量
             </b-nav-item>
             <b-nav-item
-              to="heatmap"
+              to="power-consumption"
               class="my-3 text-center"
             >
               每日用電熱圖
             </b-nav-item>
             <b-nav-item
-              to="real-time"
+              to="fifteen-demand"
               class="my-3 text-center"
             >
               每十五分鐘需量
             </b-nav-item>
             <b-nav-item
-              to="real-time"
+              to="hour-demand"
               class="my-3 text-center"
             >
               每小時最高需量

@@ -10,7 +10,11 @@ export const store = new Vuex.Store({
         },
         response: {
             real_time: Object,
-            heatmap: Object
+            heatmap: Object,
+            demand: Object,
+        },
+        selected: {
+            date: String
         }
     },
     mutations: {
@@ -19,7 +23,13 @@ export const store = new Vuex.Store({
         },
         setHeatmapData(state, payload) {
             state.response.heatmap = payload
-        }
+        },
+        setDemandData(state, payload) {
+            state.response.demand = payload
+        },
+        setSelectedDate(state, payload) {
+            state.selected.date = payload
+        },
     },
     getters: {
         RespondedRealTimeData(state) {
@@ -28,5 +38,11 @@ export const store = new Vuex.Store({
         RespondedHeatmapData(state) {
             return state.response.heatmap
         },
+        RespondedDemandData(state) {
+            return state.response.demand
+        },
+        SelectedDate(state){
+            return state.selected.date
+        }
     }
 })

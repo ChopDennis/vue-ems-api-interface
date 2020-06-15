@@ -113,14 +113,13 @@
 <script>
     export default {
         name: "RealTimeDashBoard",
-        props:{
-            outputData:{
-              type:Object,
-              default:()=>{
-                return {}
-              }
+        props: {
+            outputData: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
             }
-
         }
     }
 </script>

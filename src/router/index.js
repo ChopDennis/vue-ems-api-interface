@@ -1,14 +1,12 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-// import Heatmap from '../components/heatmap.vue'
-// import Area from '../components/area.vue'
-// import Header from '../components/header.vue'
-// import RealTime from '../components/real-time.vue'
-// import HeatmapMonth from '../components/heatmap-month.vue'
 import PageLogin from "../views/PageLogin";
 import PageRealTime from "../views/PageRealTime";
+import PageHeatmap from "../views/PagePowerConsumption";
+import PageFifteenDemand from "../views/PageFifteenDemand";
+import PageHourDemand from "../views/PageHourDemand";
 import TheHeader from "../components/TheHeader";
-import PageHeatmap from "../views/PageHeatmap";
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -28,10 +26,26 @@ const routes = [
         }
     },
     {
-        path: '/heatmap',
+        path: '/power-consumption',
         name: 'PageRealTime',
         components: {
             default: PageHeatmap,
+            nav: TheHeader
+        }
+    },
+    {
+        path: '/fifteen-demand',
+        name: 'PageFifteenDemand',
+        components: {
+            default: PageFifteenDemand,
+            nav: TheHeader
+        }
+    },
+    {
+        path: '/hour-demand',
+        name: 'PageHourDemand',
+        components: {
+            default: PageHourDemand,
             nav: TheHeader
         }
     },

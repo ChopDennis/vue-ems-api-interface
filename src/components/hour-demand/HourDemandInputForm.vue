@@ -152,12 +152,12 @@
         methods: {
             onSubmit(e) {
                 e.preventDefault()
-                let HeatmapFormValue = new FormData()
-                HeatmapFormValue.append("device_id", this.selected.place_id)
-                HeatmapFormValue.append("check_day", this.selected.date)
-                HeatmapFormValue.append("days", this.selected.days)
-                HeatmapFormValue.append("server_ip", this.selected.server_ip)
-                this.axios.post(this.$store.state.axios.baseURL + "/api/analytic/kwh_summary", HeatmapFormValue).then(
+                let heatmapFormValue = new FormData()
+                heatmapFormValue.append("device_id", this.selected.place_id)
+                heatmapFormValue.append("check_day", this.selected.date)
+                heatmapFormValue.append("days", this.selected.days)
+                heatmapFormValue.append("server_ip", this.selected.server_ip)
+                this.axios.post(this.$store.state.axios.baseURL + "/api/analytic/kw_summary/range", heatmapFormValue).then(
                     (response) => {
                         this.$store.commit("setHeatmapData",response.data)
                         this.$emit('get-responded-data')

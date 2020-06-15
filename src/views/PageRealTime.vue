@@ -1,8 +1,14 @@
 <template>
   <div>
-    <b-container class="py-5 text-white">
+    <b-container class="py-3 text-white">
+      <h4 class="text-center mb-3">
+        即時用電需量
+      </h4>
       <RealTimeInputForm @get-responded-data="preprocessData" />
       <RealTimeDashBoard :output-data="output" />
+      <h4 class="text-center mt-3">
+        即時需量變化表（每一分鐘更新）
+      </h4>
       <apexchart
         id="apex-chart"
         ref="ApexLine"
