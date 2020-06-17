@@ -129,7 +129,7 @@
                     (response) => {
                         this.$store.commit("setDemandData",response.data)
                         this.$store.commit("setSelectedDate", this.selected.date)
-                        this.$emit('get-responded-data')
+                        this.$emit('get-responded-data',this.selected)
                     }
                 )
             },

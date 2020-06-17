@@ -1,32 +1,35 @@
 <template>
-  <div>
-    <b-container class="py-3 text-white">
-      <h4 class="text-center mb-3">
-        每日用電熱圖
-      </h4>
-      <HeatmapInputForm @get-responded-data="preprocessData" />
-      <b-button class="d-block m-auto">
-        <a
-          :href="output.csv.href"
-          :download="output.csv.fileName"
-          style="color: white!important;"
-        >下載表格資料</a>
-      </b-button>
-      <div class="mt-3 text-dark">
-        <apexchart
-          ref="heatmap"
-          :height="apex.height"
-          type="heatmap"
-          :options="apex.chartOptions"
-          :series="apex.series"
-        />
-      </div>
-    </b-container>
-  </div>
+    <div>
+        <b-container class="py-3 text-white">
+            <h4 class="text-center mb-3">
+                每日用電熱圖
+            </h4>
+            <HeatmapInputForm @get-responded-data="preprocessData($event)"/>
+            <!--      <HeatmapApexChart/>-->
+            <b-button class="d-block m-auto">
+                <a
+                        :href="output.csv.href"
+                        :download="output.csv.fileName"
+                        style="color: white!important;"
+                >下載表格資料</a>
+            </b-button>
+            <h4 class="text-center mt-3">{{message.total}}</h4>
+            <div class="mt-3 text-dark">
+                <apexchart
+                        ref="heatmap"
+                        :height="apex.height"
+                        type="heatmap"
+                        :options="apex.chartOptions"
+                        :series="apex.series"
+                />
+            </div>
+        </b-container>
+    </div>
 </template>
 
 <script>
     import HeatmapInputForm from "../components/power-consumption/HeatmapInputForm";
+    // import HeatmapApexChart from "../components/power-consumption/HeatmapApexChart";
     export default {
         name: "PageHeatmap",
         components: {
@@ -46,7 +49,7 @@
                         },
                         dataLabels: {
                             dropShadow: {
-                                enabled:false
+                                enabled: false
                             },
                             enabled: false
                         }
@@ -59,24 +62,29 @@
                     series: []
                 },
                 output: {
-                    total_of_day: 0,
+                    total: 0,
                     csv: {
                         href: '',
                         fileName: '',
                         header: "data:text/csv;charset=utf-8,%EF%BB%BF",
                         content: ''
                     }
+                },
+                selected: {},
+                message: {
+                    total: ""
                 }
             }
         },
         methods: {
-            preprocessData() {
+            preprocessData(event) {
+                this.selected = event
                 const heatmapData = this.$store.getters.RespondedHeatmapData
                 const monthTotal = this.sumTotal(heatmapData)
                 this.modifyName(heatmapData, monthTotal)
                 this.showHeatmap(heatmapData)
                 this.outputCSV(heatmapData)
-                // this.message.total = "從 " + this.input.date.selected + " 開始的 " + this.input.days.selected + " 天，總用電度數為：" + this.output.total
+                this.message.total = "從 " + this.selected.date + " 開始的 " + this.selected.days + " 天，總用電度數為：" + this.output.total
             },
             modifyName(inputArray, dataList) {
                 inputArray.forEach((item, index) => {
@@ -90,7 +98,7 @@
                 inputArray.forEach((item, index) => {
                     totalOfDay[index] = parseInt(item.data.reduce(reducer).toFixed(0))
                 })
-                this.output.total_of_day = totalOfDay.reduce(reducer)
+                this.output.total = totalOfDay.reduce(reducer)
                 return totalOfDay
             },
             showHeatmap(heatmapData) {
@@ -199,8 +207,8 @@
             },
             outputCSV(inputArray) {
                 let encodedUri = ''
-                // this.output.csv.fileName = 'heatmap-' + this.input.date.selected + '-' + this.input.days.selected + '.csv'
-                this.output.csv.fileName = 'heatmap-'
+                this.output.csv.fileName = this.selected.place_id + '-' + this.selected.date + '-' + this.selected.days
+                    + '.csv'
                 inputArray.forEach((item) => {
                     this.output.csv.content += "日期（總度數）," + item.name + "\r\n" + "時間,度數" + "\r\n"
                     item.data.forEach((data, index) => {

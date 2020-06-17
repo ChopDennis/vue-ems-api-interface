@@ -160,7 +160,7 @@
                 this.axios.post(this.$store.state.axios.baseURL + "/api/analytic/kw_summary/range", heatmapFormValue).then(
                     (response) => {
                         this.$store.commit("setHeatmapData",response.data)
-                        this.$emit('get-responded-data')
+                        this.$emit('get-responded-data',this.selected)
                     }
                 )
             },

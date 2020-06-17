@@ -1,32 +1,33 @@
 <template>
-  <div>
-    <b-container class="py-3 text-white">
-      <h4 class="text-center mb-3">
-        每小時最高需量
-      </h4>
-      <HourDemandInputForm @get-responded-data="preprocessData" />
-      <b-button class="d-block m-auto">
-        <a
-          :href="output.csv.href"
-          :download="output.csv.fileName"
-          style="color: white!important;"
-        >下載表格資料</a>
-      </b-button>
-      <div class="mt-3 text-dark">
-        <apexchart
-          ref="heatmap"
-          :height="apex.height"
-          type="heatmap"
-          :options="apex.chartOptions"
-          :series="apex.series"
-        />
-      </div>
-    </b-container>
-  </div>
+    <div>
+        <b-container class="py-3 text-white">
+            <h4 class="text-center mb-3">
+                每小時最高需量
+            </h4>
+            <HourDemandInputForm @get-responded-data="preprocessData($event)"/>
+            <b-button class="d-block m-auto">
+                <a
+                        :href="output.csv.href"
+                        :download="output.csv.fileName"
+                        style="color: white!important;"
+                >下載表格資料</a>
+            </b-button>
+            <div class="mt-3 text-dark">
+                <apexchart
+                        ref="heatmap"
+                        :height="apex.height"
+                        type="heatmap"
+                        :options="apex.chartOptions"
+                        :series="apex.series"
+                />
+            </div>
+        </b-container>
+    </div>
 </template>
 
 <script>
     import HourDemandInputForm from "../components/hour-demand/HourDemandInputForm";
+
     export default {
         name: "PageHourDemanf",
         components: {
@@ -62,17 +63,20 @@
                         header: "data:text/csv;charset=utf-8,%EF%BB%BF",
                         content: ''
                     }
-                }
+                },
+                selected: {},
             }
         },
         methods: {
-            preprocessData() {
+            preprocessData(event) {
+                this.selected = event
+                console.log(this.selected)
                 const heatmapData = this.$store.getters.RespondedHeatmapData
-                const monthTotal = this.sumTotal(heatmapData)
-                this.modifyName(heatmapData, monthTotal)
+                const peakOfDay = this.findPeakOfDay(heatmapData)
+                this.modifyName(heatmapData, peakOfDay)
                 this.showHeatmap(heatmapData)
                 this.outputCSV(heatmapData)
-                // this.message.total = "從 " + this.input.date.selected + " 開始的 " + this.input.days.selected + " 天，總用電度數為：" + this.output.total
+
             },
             modifyName(inputArray, dataList) {
                 inputArray.forEach((item, index) => {
@@ -80,14 +84,12 @@
                     item.name += '（' + dataList[index] + '）'
                 })
             },
-            sumTotal(inputArray) {
-                let totalOfDay = []
-                const reducer = (accumulator, currentValue) => accumulator + currentValue
-                inputArray.forEach((item, index) => {
-                    totalOfDay[index] = parseInt(item.data.reduce(reducer).toFixed(0))
+            findPeakOfDay(inputArray) {
+                let peakOfDay = []
+                inputArray.forEach((item,index) =>{
+                    peakOfDay[index] = Math.max.apply(Math,item.data)
                 })
-                this.output.total_of_day = totalOfDay.reduce(reducer)
-                return totalOfDay
+                return peakOfDay
             },
             showHeatmap(heatmapData) {
                 const maximum = this.findMaximum(heatmapData)
@@ -195,10 +197,9 @@
             },
             outputCSV(inputArray) {
                 let encodedUri = ''
-                // this.output.csv.fileName = 'heatmap-' + this.input.date.selected + '-' + this.input.days.selected + '.csv'
-                this.output.csv.fileName = 'heatmap-'
+                this.output.csv.fileName = this.selected.place_id + '-' + this.selected.date + '-' + this.selected.days
                 inputArray.forEach((item) => {
-                    this.output.csv.content += "日期（總度數）," + item.name + "\r\n" + "時間,度數" + "\r\n"
+                    this.output.csv.content += "日期（總度數）," + item.name + "\r\n" + "時間,需量" + "\r\n"
                     item.data.forEach((data, index) => {
                         this.output.csv.content += this.apex.chartOptions.xaxis.categories[index] + ',' + data + "\r\n"
                     })

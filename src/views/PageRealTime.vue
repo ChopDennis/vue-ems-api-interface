@@ -4,10 +4,10 @@
       <h4 class="text-center mb-3">
         即時用電需量
       </h4>
-      <RealTimeInputForm @get-responded-data="preprocessData" />
+      <RealTimeInputForm ref="inputForm" @get-responded-data="preprocessData" />
       <RealTimeDashBoard :output-data="output" />
       <h4 class="text-center mt-3">
-        即時需量變化表（每一分鐘更新）
+         下一次資料更新時間為：{{ output.countdown }} 秒後
       </h4>
       <apexchart
         id="apex-chart"
@@ -117,10 +117,19 @@
                     })
                 }
                 this.setApexLine()
+                this.countDown()
             },
             setApexLine() {
                 const AppendTime = new Date().getTime()
                 this.$refs.ApexLine.appendData([{data: [[AppendTime + 28800000, this.output.lists[2].value]]}])
+            },
+            countDown() {
+                setInterval(() => {
+                    this.output.countdown--
+                    if (this.output.countdown === 0) {
+                        this.output.countdown = 60
+                    }
+                }, 1000)
             }
         },
     }

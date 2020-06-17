@@ -48,7 +48,7 @@
             </b-nav-item>
             <b-nav-item
               class="my-3 text-center"
-              @click="loginEMS"
+              @click="logoutEMS"
             >
               登出系統
             </b-nav-item>
@@ -83,7 +83,7 @@
     export default {
         name: "TheHeader",
         methods: {
-            loginEMS() {
+            logoutEMS() {
                 this.axios.get(this.$store.state.axios.baseURL + "/api/user/logout").then(
                     (response) => {
                         if (response.data.status === "success") {

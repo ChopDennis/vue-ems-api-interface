@@ -6,7 +6,8 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         axios: {
-            baseURL: "https://demo-site.ima-ems.com"
+            baseURL: "https://demo-site.ima-ems.com",
+            // baseURL: "",
         },
         response: {
             real_time: Object,
@@ -15,6 +16,12 @@ export const store = new Vuex.Store({
         },
         selected: {
             date: String
+        },
+        option: {
+            places: Object
+        },
+        authority: {
+            admin: Boolean
         }
     },
     mutations: {
@@ -30,6 +37,12 @@ export const store = new Vuex.Store({
         setSelectedDate(state, payload) {
             state.selected.date = payload
         },
+        setOptionPlaces(state, payload) {
+            state.option.places = payload
+        },
+        setAuthority(state, payload) {
+            state.authority.admin = payload
+        }
     },
     getters: {
         RespondedRealTimeData(state) {
@@ -41,8 +54,14 @@ export const store = new Vuex.Store({
         RespondedDemandData(state) {
             return state.response.demand
         },
-        SelectedDate(state){
+        SelectedDate(state) {
             return state.selected.date
+        },
+        OptionPlaces(state) {
+            return state.option.places
+        },
+        Authority(state) {
+            return state.authority.admin
         }
     }
 })

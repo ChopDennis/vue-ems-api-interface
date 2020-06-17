@@ -1,39 +1,40 @@
 <template>
-  <div>
-    <b-container class="py-3 text-white">
-      <h4 class="text-center mb-3">
-        每十五分鐘需量
-      </h4>
-      <DemandInputForm @get-responded-data="preprocessData" />
-      <b-button class="d-block m-auto">
-        <a
-          :href="output.csv.href"
-          :download="output.csv.fileName"
-          style="color: white!important;"
-        >下載表格資料</a>
-      </b-button>
-      <div class="mt-3 text-dark">
-        <apexchart
-          ref="area"
-          :height="apex.height"
-          type="area"
-          :options="apex.chartOptions"
-          :series="apex.series"
-        />
-      </div>
-    </b-container>
-  </div>
+    <div>
+        <b-container class="py-3 text-white">
+            <h4 class="text-center mb-3">
+                每十五分鐘需量
+            </h4>
+            <DemandInputForm @get-responded-data="preprocessData($event)"/>
+            <b-button class="d-block m-auto">
+                <a
+                        :href="output.csv.href"
+                        :download="output.csv.fileName"
+                        style="color: white!important;"
+                >下載表格資料</a>
+            </b-button>
+            <div class="mt-3 text-dark">
+                <apexchart
+                        ref="area"
+                        :height="apex.height"
+                        type="area"
+                        :options="apex.chartOptions"
+                        :series="apex.series"
+                />
+            </div>
+        </b-container>
+    </div>
 </template>
 
 <script>
     import DemandInputForm from "../components/fifteen-demand/DemandInputForm";
+
     export default {
         name: "PageFifteenDemand",
-        components:{
-          DemandInputForm
+        components: {
+            DemandInputForm
         },
-        data(){
-            return{
+        data() {
+            return {
                 apex: {
                     height: window.innerHeight - 200,
                     chartOptions: {
@@ -79,10 +80,12 @@
                         content: ''
                     }
                 },
+                selected: {}
             }
         },
-        methods:{
-            preprocessData() {
+        methods: {
+            preprocessData(event) {
+                this.selected = event
                 const demandData = this.$store.getters.RespondedDemandData
                 console.log(demandData)
                 const dataWithTime = this.addTime2xAxis(demandData)
@@ -99,7 +102,7 @@
                 return dataWithTime
             }, outputCSV(inputArray) {
                 let encodedUri = ''
-                this.output.csv.fileName = 'kw-' + this.$store.state.selected.date + '.csv'
+                this.output.csv.fileName = this.selected.place_id + '-' + this.$store.state.selected.date + '.csv'
                 this.output.csv.content += '日期,' + this.$store.state.selected.date + "\r\n" + "時間,需量" + "\r\n"
                 inputArray.forEach((item) => {
                     let row = this.timestamp2String(item[0]) + ',' + item[1]
