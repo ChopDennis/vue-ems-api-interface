@@ -196,6 +196,7 @@
                 return '#' + ('000000' + h.toString(16)).slice(-6)
             },
             outputCSV(inputArray) {
+                this.output.csv.content = ''
                 let encodedUri = ''
                 this.output.csv.fileName = this.selected.place_id + '-' + this.selected.date + '-' + this.selected.days
                 inputArray.forEach((item) => {

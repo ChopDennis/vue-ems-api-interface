@@ -101,6 +101,7 @@
                 })
                 return dataWithTime
             }, outputCSV(inputArray) {
+                this.output.csv.content = ''
                 let encodedUri = ''
                 this.output.csv.fileName = this.selected.place_id + '-' + this.$store.state.selected.date + '.csv'
                 this.output.csv.content += '日期,' + this.$store.state.selected.date + "\r\n" + "時間,需量" + "\r\n"
