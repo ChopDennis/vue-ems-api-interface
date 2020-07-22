@@ -6,7 +6,7 @@ import PageHeatmap from "../views/PagePowerConsumption";
 import PageFifteenDemand from "../views/PageFifteenDemand";
 import PageHourDemand from "../views/PageHourDemand";
 import TheHeader from "../components/TheHeader";
-
+import PageDemo from "../views/PageDemo";
 Vue.use(VueRouter)
 
 const routes = [
@@ -47,6 +47,13 @@ const routes = [
         components: {
             default: PageHourDemand,
             nav: TheHeader
+        }
+    },
+    {
+        path: '/demo',
+        name: 'PageDemo',
+        components: {
+            default: PageDemo,
         }
     },
 
