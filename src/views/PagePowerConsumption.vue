@@ -4,15 +4,10 @@
             <h4 class="text-center mb-3">
                 每日用電熱圖
             </h4>
-            <HeatmapInputForm @get-responded-data="preprocessData($event)"/>
-            <!--      <HeatmapApexChart/>-->
-            <b-button class="d-block m-auto">
-                <a
-                        :href="output.csv.href"
-                        :download="output.csv.fileName"
-                        style="color: white!important;"
-                >下載表格資料</a>
-            </b-button>
+            <HeatmapInputForm :csv-href="output.csv.href" :file-name="output.csv.fileName"
+                              :download-btn-show="output.csv.button"
+                    @get-responded-data="preprocessData($event)" />
+
             <h4 class="text-center mt-3">{{message.total}}</h4>
             <div class="mt-3 text-dark">
                 <apexchart
@@ -67,7 +62,8 @@
                         href: '',
                         fileName: '',
                         header: "data:text/csv;charset=utf-8,%EF%BB%BF",
-                        content: ''
+                        content: '',
+                        button:false
                     }
                 },
                 selected: {},
@@ -84,6 +80,7 @@
                 this.modifyName(heatmapData, monthTotal)
                 this.showHeatmap(heatmapData)
                 this.outputCSV(heatmapData)
+                this.output.csv.button = true
                 this.message.total = "從 " + this.selected.date + " 開始的 " + this.selected.days + " 天，總用電度數為：" + this.output.total
             },
             modifyName(inputArray, dataList) {
@@ -184,10 +181,17 @@
             },
             setPercent(upperLimit, lowerLimit) {
                 let percent = []
-                const step = Math.floor((upperLimit - lowerLimit) / 10)
+                let step = 0
+                const range = upperLimit - lowerLimit
+                if (range < 10){
+                    step = Math.ceil((range) / 10)
+                }else{
+                    step = Math.floor((range) / 10)
+                }
                 for (let i = 1, j = 1; i < 10; i++) {
                     percent[i] = lowerLimit + step * j++
                 }
+                console.log('最大值：',upperLimit,'；最小值：',lowerLimit,'；範圍：'+percent,'；階層：',step)
                 return percent
             },
             percent2color(percent) {

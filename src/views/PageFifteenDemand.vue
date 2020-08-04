@@ -4,14 +4,10 @@
             <h4 class="text-center mb-3">
                 每十五分鐘需量
             </h4>
-            <DemandInputForm @get-responded-data="preprocessData($event)"/>
-            <b-button class="d-block m-auto">
-                <a
-                        :href="output.csv.href"
-                        :download="output.csv.fileName"
-                        style="color: white!important;"
-                >下載表格資料</a>
-            </b-button>
+            <DemandInputForm :csv-href="output.csv.href" :file-name="output.csv.fileName"
+            :download-btn-show="output.csv.button"
+                    @get-responded-data="preprocessData($event)"/>
+
             <div class="mt-3 text-dark">
                 <apexchart
                         ref="area"
@@ -77,7 +73,8 @@
                         href: '',
                         fileName: '',
                         header: "data:text/csv;charset=utf-8,%EF%BB%BF",
-                        content: ''
+                        content: '',
+                        button:false
                     }
                 },
                 selected: {}
@@ -91,6 +88,7 @@
                 const dataWithTime = this.addTime2xAxis(demandData)
                 this.apex.series = [{name: this.$store.state.selected.date, data: dataWithTime}]
                 this.outputCSV(dataWithTime)
+                this.output.csv.button = true
             }, addTime2xAxis(inputJson) {
                 let timestamp = new Date(this.$store.state.selected.date).getTime()
                 let dataWithTime = []

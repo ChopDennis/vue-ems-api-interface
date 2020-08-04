@@ -105,12 +105,25 @@
                         </option>
                     </b-form-select>
                 </b-form-group>
-                <b-button
-                        type="submit"
-                        class="m-auto d-block"
-                >
-                    送出查詢資料
-                </b-button>
+                <b-row>
+                    <b-col offset-lg="3" lg="3" class="text-center">
+                        <b-button
+                                type="submit"
+                                class="btn-info mb-lg-0 mb-3"
+                        >
+                            送出查詢資料
+                        </b-button>
+                    </b-col>
+                    <b-col lg="3" class="text-center">
+                        <b-button v-show="downloadBtnShow">
+                            <a
+                                    :href="csvHref"
+                                    :download="fileName"
+                                    style="color: white!important;"
+                            >下載表格資料</a>
+                        </b-button>
+                    </b-col>
+                </b-row>
             </b-form>
         </b-card>
     </div>
@@ -119,6 +132,21 @@
 <script>
     export default {
         name: "HeatmapInputForm",
+        props: {
+            csvHref: {
+                type: String,
+                required: true
+            },
+            fileName: {
+                type: String,
+                required: true
+            },
+            downloadBtnShow: {
+                type: Boolean,
+                default: false,
+                required: true
+            }
+        },
         data() {
             return {
                 admin: false,

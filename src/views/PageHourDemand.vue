@@ -4,15 +4,12 @@
             <h4 class="text-center mb-3">
                 每小時最高需量
             </h4>
-            <HourDemandInputForm @get-responded-data="preprocessData($event)"/>
-            <b-button class="d-block m-auto">
-                <a
-                        :href="output.csv.href"
-                        :download="output.csv.fileName"
-                        style="color: white!important;"
-                >下載表格資料</a>
-            </b-button>
+            <HourDemandInputForm :csv-href="output.csv.href" :file-name="output.csv.fileName"
+                                 :download-btn-show="output.csv.button"
+                                 @get-responded-data="preprocessData($event)"/>
+            <h4 class="text-center mt-3">{{message.peakOfSearch}}</h4>
             <div class="mt-3 text-dark">
+
                 <apexchart
                         ref="heatmap"
                         :height="apex.height"
@@ -61,10 +58,15 @@
                         href: '',
                         fileName: '',
                         header: "data:text/csv;charset=utf-8,%EF%BB%BF",
-                        content: ''
-                    }
+                        content: '',
+                        button:false
+                    },
                 },
                 selected: {},
+                message:{
+                    peakOfSearch:''
+                },
+
             }
         },
         methods: {
@@ -73,10 +75,13 @@
                 console.log(this.selected)
                 const heatmapData = this.$store.getters.RespondedHeatmapData
                 const peakOfDay = this.findPeakOfDay(heatmapData)
+                const peakValue = Math.max.apply(null,peakOfDay)
+                this.message.peakOfSearch = "從 " + this.selected.date + " 開始的 " + this.selected.days + " 天，最高用電需量為："
+                    + peakValue + ' 度'
                 this.modifyName(heatmapData, peakOfDay)
                 this.showHeatmap(heatmapData)
                 this.outputCSV(heatmapData)
-
+                this.output.csv.button = true
             },
             modifyName(inputArray, dataList) {
                 inputArray.forEach((item, index) => {
