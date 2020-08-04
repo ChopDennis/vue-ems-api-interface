@@ -1,107 +1,114 @@
 <template>
-    <div>
-        <b-card
-                bg-variant="dark"
-                class="mb-5 px-lg-5"
+  <div>
+    <b-card
+      bg-variant="dark"
+      class="mb-5 px-lg-5"
+    >
+      <b-form
+        @submit="onSubmit"
+      >
+        <b-form-group
+          label-cols-sm="3"
+          label="電錶號碼："
+          label-align-sm="right"
+          label-for="demand-place-id"
         >
-            <b-form
-                    @submit="onSubmit"
+          <b-form-input
+            v-if="admin"
+            id="demand-place-id"
+            v-model="selected.place_id"
+            type="text"
+            placeholder="輸入電錶號碼"
+          />
+          <b-form-select
+            v-else
+            id="demand-place-id"
+            v-model="selected.place_id"
+          >
+            <option
+              value=""
+              disabled
+              selected
             >
-                <b-form-group
-                        label-cols-sm="3"
-                        label="電錶號碼："
-                        label-align-sm="right"
-                        label-for="demand-place-id"
-                >
-                    <b-form-input
-                            v-if="admin"
-                            id="demand-place-id"
-                            v-model="selected.place_id"
-                            type="text"
-                            placeholder="輸入電錶號碼"
-                    />
-                    <b-form-select
-                            v-else
-                            id="demand-place-id"
-                            v-model="selected.place_id"
-                    >
-                        <option
-                                value=""
-                                disabled
-                                selected
-                        >
-                            選擇電錶號碼
-                        </option>
-                        <option
-                                v-for="(item, key) in options.place_id"
-                                :key="key"
-                                :value="item"
-                        >
-                            {{ key }}
-                        </option>
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group
-                        v-if="admin"
-                        label-cols-sm="3"
-                        label="伺服器位置："
-                        label-align-sm="right"
-                        label-for="demand-server-ip"
-                >
-                    <b-form-select
-                            id="demand-server-ip"
-                            v-model="selected.server_ip"
-                    >
-                        <option
-                                value=""
-                                disabled
-                                selected
-                        >
-                            選擇伺服器
-                        </option>
-                        <option
-                                v-for="(item, key) in options.server_ip"
-                                :key="key"
-                                :value="item"
-                        >
-                            {{ key }}
-                        </option>
-                    </b-form-select>
-                </b-form-group>
-                <b-form-group
-                        label-cols-sm="3"
-                        label="日期："
-                        label-align-sm="right"
-                        label-for="demand-date"
-                >
-                    <b-form-input
-                            id="demand-date"
-                            v-model="selected.date"
-                            type="date"
-                    />
-                </b-form-group>
-                <b-row>
-                    <b-col offset-lg="3" lg="3" class="text-center">
-                        <b-button
-                                type="submit"
-                                class="btn-info mb-lg-0 mb-3"
-                        >
-                            送出查詢資料
-                        </b-button>
-                    </b-col>
-                    <b-col lg="3" class="text-center">
-                        <b-button v-show="downloadBtnShow">
-                            <a
-                                    :href="csvHref"
-                                    :download="fileName"
-                                    style="color: white!important;"
-                            >下載表格資料</a>
-                        </b-button>
-                    </b-col>
-                </b-row>
-            </b-form>
-        </b-card>
-    </div>
+              選擇電錶號碼
+            </option>
+            <option
+              v-for="(item, key) in options.place_id"
+              :key="key"
+              :value="item"
+            >
+              {{ key }}
+            </option>
+          </b-form-select>
+        </b-form-group>
+        <b-form-group
+          v-if="admin"
+          label-cols-sm="3"
+          label="伺服器位置："
+          label-align-sm="right"
+          label-for="demand-server-ip"
+        >
+          <b-form-select
+            id="demand-server-ip"
+            v-model="selected.server_ip"
+          >
+            <option
+              value=""
+              disabled
+              selected
+            >
+              選擇伺服器
+            </option>
+            <option
+              v-for="(item, key) in options.server_ip"
+              :key="key"
+              :value="item"
+            >
+              {{ key }}
+            </option>
+          </b-form-select>
+        </b-form-group>
+        <b-form-group
+          label-cols-sm="3"
+          label="日期："
+          label-align-sm="right"
+          label-for="demand-date"
+        >
+          <b-form-input
+            id="demand-date"
+            v-model="selected.date"
+            type="date"
+          />
+        </b-form-group>
+        <b-row>
+          <b-col
+            offset-lg="3"
+            lg="3"
+            class="text-center"
+          >
+            <b-button
+              type="submit"
+              class="btn-info mb-lg-0 mb-3"
+            >
+              送出查詢資料
+            </b-button>
+          </b-col>
+          <b-col
+            lg="3"
+            class="text-center"
+          >
+            <b-button v-show="downloadBtnShow">
+              <a
+                :href="csvHref"
+                :download="fileName"
+                style="color: white!important;"
+              >下載表格資料</a>
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-form>
+    </b-card>
+  </div>
 </template>
 
 <script>

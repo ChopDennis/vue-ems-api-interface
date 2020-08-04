@@ -1,25 +1,29 @@
 <template>
-    <div>
-        <b-container class="py-3 text-white">
-            <h4 class="text-center mb-3">
-                每小時最高需量
-            </h4>
-            <HourDemandInputForm :csv-href="output.csv.href" :file-name="output.csv.fileName"
-                                 :download-btn-show="output.csv.button"
-                                 @get-responded-data="preprocessData($event)"/>
-            <h4 class="text-center mt-3">{{message.peakOfSearch}}</h4>
-            <div class="mt-3 text-dark">
-
-                <apexchart
-                        ref="heatmap"
-                        :height="apex.height"
-                        type="heatmap"
-                        :options="apex.chartOptions"
-                        :series="apex.series"
-                />
-            </div>
-        </b-container>
-    </div>
+  <div>
+    <b-container class="py-3 text-white">
+      <h4 class="text-center mb-3">
+        每小時最高需量
+      </h4>
+      <HourDemandInputForm
+        :csv-href="output.csv.href"
+        :file-name="output.csv.fileName"
+        :download-btn-show="output.csv.button"
+        @get-responded-data="preprocessData($event)"
+      />
+      <h4 class="text-center mt-3">
+        {{ message.peakOfSearch }}
+      </h4>
+      <div class="mt-3 text-dark">
+        <apexchart
+          ref="heatmap"
+          :height="apex.height"
+          type="heatmap"
+          :options="apex.chartOptions"
+          :series="apex.series"
+        />
+      </div>
+    </b-container>
+  </div>
 </template>
 
 <script>
@@ -77,7 +81,7 @@
                 const peakOfDay = this.findPeakOfDay(heatmapData)
                 const peakValue = Math.max.apply(null,peakOfDay)
                 this.message.peakOfSearch = "從 " + this.selected.date + " 開始的 " + this.selected.days + " 天，最高用電需量為："
-                    + peakValue + ' 度'
+                    + peakValue + ' 瓩'
                 this.modifyName(heatmapData, peakOfDay)
                 this.showHeatmap(heatmapData)
                 this.outputCSV(heatmapData)
@@ -179,10 +183,17 @@
             },
             setPercent(upperLimit, lowerLimit) {
                 let percent = []
-                const step = Math.floor((upperLimit - lowerLimit) / 10)
+                let step = 0
+                const range = upperLimit - lowerLimit
+                if (range < 10){
+                    step = Math.ceil((range) / 10)
+                }else{
+                    step = Math.floor((range) / 10)
+                }
                 for (let i = 1, j = 1; i < 10; i++) {
                     percent[i] = lowerLimit + step * j++
                 }
+                console.log('最大值：',upperLimit,'；最小值：',lowerLimit,'；範圍：'+percent,'；階層：',step)
                 return percent
             },
             percent2color(percent) {

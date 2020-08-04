@@ -1,64 +1,64 @@
 <template>
-    <div
-            id="ems-login-page"
-            class="text-white"
+  <div
+    id="ems-login-page"
+    class="text-white"
+  >
+    <b-container
+      id="ems-login-container"
+      class="my-5 p-3"
     >
-        <b-container
-                id="ems-login-container"
-                class="my-5 p-3"
+      <b-card
+        bg-variant="dark"
+        class="mb-3 px-md-5"
+      >
+        <h2 class="text-center mb-3">
+          登入 EMS 系統
+        </h2>
+        <b-form-group
+          label-cols-sm="3"
+          label="輸入信箱："
+          label-align-sm="right"
+          label-for="ems-email"
         >
-            <b-card
-                    bg-variant="dark"
-                    class="mb-3 px-md-5"
-            >
-                <h2 class="text-center mb-3">
-                    登入 EMS 系統
-                </h2>
-                <b-form-group
-                        label-cols-sm="3"
-                        label="輸入信箱："
-                        label-align-sm="right"
-                        label-for="ems-email"
-                >
-                    <b-form-input
-                            id="ems-email"
-                            v-model="input.email"
-                            type="email"
-                            required
-                    />
-                </b-form-group>
-                <b-form-group
-                        label-cols-sm="3"
-                        label="輸入密碼："
-                        label-align-sm="right"
-                        label-for="ems-password"
-                >
-                    <b-form-input
-                            id="ems-email"
-                            v-model="input.password"
-                            type="password"
-                            required
-                    />
-                </b-form-group>
+          <b-form-input
+            id="ems-email"
+            v-model="input.email"
+            type="email"
+            required
+          />
+        </b-form-group>
+        <b-form-group
+          label-cols-sm="3"
+          label="輸入密碼："
+          label-align-sm="right"
+          label-for="ems-password"
+        >
+          <b-form-input
+            id="ems-email"
+            v-model="input.password"
+            type="password"
+            required
+          />
+        </b-form-group>
 
-                <b-button
-                        type="submit"
-                        class="d-block m-auto"
-                        @click="loginEMS()"
-                >
-                    登入
-                </b-button>
-            </b-card>
-            <b-alert
-                    :show="login_alert"
-                    variant="success"
-                    fade
-                    class="text-center"
-            >
-                登入成功！
-            </b-alert>
-        </b-container>
-    </div>
+        <b-button
+          type="submit"
+          class="d-block m-auto"
+          @click="loginEMS()"
+        >
+          登入
+        </b-button>
+      </b-card>
+      <b-alert
+        :show="login_alert"
+        variant="success"
+        fade
+        class="text-center"
+      >
+        登入成功！
+      </b-alert>
+    </b-container>
+  </div>
 </template>
 
 <script>

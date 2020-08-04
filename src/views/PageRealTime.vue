@@ -4,10 +4,13 @@
       <h4 class="text-center mb-3">
         即時用電需量
       </h4>
-      <RealTimeInputForm ref="inputForm" @get-responded-data="preprocessData" />
+      <RealTimeInputForm
+        ref="inputForm"
+        @get-responded-data="preprocessData"
+      />
       <RealTimeDashBoard :output-data="output" />
       <h4 class="text-center mt-3">
-         下一次資料更新時間為：{{ output.countdown }} 秒後
+        下一次資料更新時間為：{{ output.countdown }} 秒後
       </h4>
       <apexchart
         id="apex-chart"

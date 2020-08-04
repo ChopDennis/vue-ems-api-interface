@@ -1,25 +1,30 @@
 <template>
-    <div>
-        <b-container class="py-3 text-white">
-            <h4 class="text-center mb-3">
-                每日用電熱圖
-            </h4>
-            <HeatmapInputForm :csv-href="output.csv.href" :file-name="output.csv.fileName"
-                              :download-btn-show="output.csv.button"
-                    @get-responded-data="preprocessData($event)" />
+  <div>
+    <b-container class="py-3 text-white">
+      <h4 class="text-center mb-3">
+        每日用電熱圖
+      </h4>
+      <HeatmapInputForm
+        :csv-href="output.csv.href"
+        :file-name="output.csv.fileName"
+        :download-btn-show="output.csv.button"
+        @get-responded-data="preprocessData($event)"
+      />
 
-            <h4 class="text-center mt-3">{{message.total}}</h4>
-            <div class="mt-3 text-dark">
-                <apexchart
-                        ref="heatmap"
-                        :height="apex.height"
-                        type="heatmap"
-                        :options="apex.chartOptions"
-                        :series="apex.series"
-                />
-            </div>
-        </b-container>
-    </div>
+      <h4 class="text-center mt-3">
+        {{ message.total }}
+      </h4>
+      <div class="mt-3 text-dark">
+        <apexchart
+          ref="heatmap"
+          :height="apex.height"
+          type="heatmap"
+          :options="apex.chartOptions"
+          :series="apex.series"
+        />
+      </div>
+    </b-container>
+  </div>
 </template>
 
 <script>

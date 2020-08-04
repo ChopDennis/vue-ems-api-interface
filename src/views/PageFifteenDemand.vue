@@ -1,24 +1,27 @@
 <template>
-    <div>
-        <b-container class="py-3 text-white">
-            <h4 class="text-center mb-3">
-                每十五分鐘需量
-            </h4>
-            <DemandInputForm :csv-href="output.csv.href" :file-name="output.csv.fileName"
-            :download-btn-show="output.csv.button"
-                    @get-responded-data="preprocessData($event)"/>
+  <div>
+    <b-container class="py-3 text-white">
+      <h4 class="text-center mb-3">
+        每十五分鐘需量
+      </h4>
+      <DemandInputForm
+        :csv-href="output.csv.href"
+        :file-name="output.csv.fileName"
+        :download-btn-show="output.csv.button"
+        @get-responded-data="preprocessData($event)"
+      />
 
-            <div class="mt-3 text-dark">
-                <apexchart
-                        ref="area"
-                        :height="apex.height"
-                        type="area"
-                        :options="apex.chartOptions"
-                        :series="apex.series"
-                />
-            </div>
-        </b-container>
-    </div>
+      <div class="mt-3 text-dark">
+        <apexchart
+          ref="area"
+          :height="apex.height"
+          type="area"
+          :options="apex.chartOptions"
+          :series="apex.series"
+        />
+      </div>
+    </b-container>
+  </div>
 </template>
 
 <script>
